@@ -2,39 +2,42 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
 
-public class Controller {
+public class Controller
+{
 
-	//TODO Turn the master lists into database tables
+	// TODO Turn the master lists into database tables
 	public static Hashtable<Integer, String> MASTER_RESOURCE_LIST;
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
 	private static ArrayList<Sector> SECTOR_LIST;
+	private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
 
 	static Scanner INPUT_SCANNER = new Scanner(System.in);
-	
+
 	// private Hashtable<Integer, String> factoryNames;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		InitializeMasterLists();
 		InitializeSectorList();
 		System.out.printf(SECTOR_LIST.get(0).toString());
-		
-		
+
 		// return 0;
 	}
 
-	private static void InitializeSectorList() {
+	private static void InitializeSectorList()
+	{
 		SECTOR_LIST = new ArrayList<>();
 		Sector sect1 = new Sector("Argon Prime");
 		Sector sect2 = new Sector("Power Circle");
 		Sector sect3 = new Sector("Ore Belt");
-		
+
 		SECTOR_LIST.add(sect1);
 		SECTOR_LIST.add(sect2);
 		SECTOR_LIST.add(sect3);
-		
+
 		LinkSectors(sect1, sect2);
 		LinkSectors(sect1, sect3);
-		
+
 		Factory f;
 		f = new Factory(0, 'A', 'L');
 		sect1.AddFactory(f);
@@ -42,10 +45,11 @@ public class Controller {
 		sect1.AddFactory(f);
 		f = new Factory(3, 'A', 'S');
 		sect1.AddFactory(f);
-		
+
 	}
 
-	private static void InitializeMasterLists() {
+	private static void InitializeMasterLists()
+	{
 		MASTER_RESOURCE_LIST = new Hashtable<>();
 		MASTER_RESOURCE_LIST.put(0, "Energy");
 		MASTER_RESOURCE_LIST.put(1, "Food");
@@ -69,10 +73,23 @@ public class Controller {
 		MASTER_FACTORY_LIST.put(3, f);
 
 	}
-	
+
 	private static void LinkSectors(Sector sect1, Sector sect2)
 	{
 		sect1.AddSector(sect2);
 		sect2.AddSector(sect1);
+	}
+
+	/**
+	 * Pulses every sector for production and requisition. Consists of these
+	 * steps; 1. Production using stockpiled resources 2. Searching for
+	 * somewhere to offload produced resources
+	 */
+	private static void Pulse()
+	{
+		for (Sector sec : SECTOR_LIST)
+		{
+			sec.Pulse();
+		}
 	}
 }
