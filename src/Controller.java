@@ -8,6 +8,7 @@ public class Controller
 	// TODO Turn the master lists into database tables
 	public static Hashtable<Integer, String> MASTER_RESOURCE_LIST;
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
+	public static int MAX_TRAVEL_DISTANCE = 2;
 	private static ArrayList<Sector> SECTOR_LIST;
 	private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
 
