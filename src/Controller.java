@@ -14,13 +14,11 @@ public class Controller
 
 	static Scanner INPUT_SCANNER = new Scanner(System.in);
 
-	// private Hashtable<Integer, String> factoryNames;
-
 	public static void main(String[] args)
 	{
 		InitializeMasterLists();
-		InitializeSectorList();
-		System.out.printf(SECTOR_LIST.get(0).toString());
+		//InitializeSectorList();
+		//System.out.printf(SECTOR_LIST.get(0).toString());
 
 		// return 0;
 	}

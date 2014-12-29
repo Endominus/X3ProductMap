@@ -37,12 +37,15 @@ public class Sector
 		return supply + demand;
 	}
 
+	//TODO Remove? Doesn't seem useful any more.
 	public double DemandFactor(int id)
 	{
 		if (!this.resourceDemand.containsKey(id))
 			return 0;
-		return (-1.0) * this.resourceSupply.get(id)
-				/ this.resourceDemand.get(id);
+		double demand = -1.0 * this.resourceDemand.get(id);
+		double supply = 1.0 * this.resourceSupply.get(id);
+		
+		return Math.max(0, (demand - supply)/demand);
 	}
 
 	// The current resources demanded by this sector (resourceDemand -
@@ -54,8 +57,9 @@ public class Sector
 		for (Entry<Integer, Integer> entry : this.resourceDemand.entrySet())
 		{
 			key = entry.getKey();
-			value = entry.getValue() - this.resourceStockpile.get(key);
-			toReturn.put(key, value);
+			value = entry.getValue() + this.resourceStockpile.get(key);
+			if (value < 0)
+				toReturn.put(key, value);
 		}
 		return toReturn;
 	}
@@ -168,7 +172,7 @@ public class Sector
 		ReceiveShipments();
 	}
 
-	private void ReceiveShipments()
+	public void ReceiveShipments()
 	{
 		int[] res;
 		for (int i = 0; i < this.resourcesInTransit.size(); i++)
@@ -216,7 +220,7 @@ public class Sector
 				}
 			}
 			
-			if (s.getDistance() < 3)
+			if (s.getDistance() < Controller.MAX_TRAVEL_DISTANCE)
 			{
 				//Watch this; expecting a bug from wrong distance reporting
 				s.sectorList.forEach((sect) -> 
@@ -239,6 +243,11 @@ public class Sector
 					break;
 				}
 			}
+		}
+		
+		for (Sector sect : traversed)
+		{
+			sect.setDistance(0);
 		}
 	}
 
@@ -300,5 +309,25 @@ public class Sector
 	public void setDistance(int distance)
 	{
 		this.distance = distance;
+	}
+
+	public ArrayList<Factory> getFactoryList()
+	{
+		return factoryList;
+	}
+
+	public ArrayList<Sector> getSectorList()
+	{
+		return sectorList;
+	}
+
+	public ArrayList<int[]> getResourcesInTransit()
+	{
+		return resourcesInTransit;
+	}
+
+	public HashMap<Integer, Integer> getResourceStockpile()
+	{
+		return resourceStockpile;
 	}
 }
