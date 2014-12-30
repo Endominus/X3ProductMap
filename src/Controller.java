@@ -10,16 +10,17 @@ public class Controller
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
 	public static int MAX_TRAVEL_DISTANCE = 2;
 	private static ArrayList<Sector> SECTOR_LIST;
-	private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
+	//private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
 
 	static Scanner INPUT_SCANNER = new Scanner(System.in);
 
 	public static void main(String[] args)
 	{
-		InitializeMasterLists();
+		//InitializeMasterLists();
 		//InitializeSectorList();
 		//System.out.printf(SECTOR_LIST.get(0).toString());
 
+		View v = new View();
 		// return 0;
 	}
 
