@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class Controller
@@ -8,28 +10,39 @@ public class Controller
 	// TODO Turn the master lists into database tables
 	public static Hashtable<Integer, String> MASTER_RESOURCE_LIST;
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
-	public static int MAX_TRAVEL_DISTANCE = 2;
 	private static ArrayList<Sector> SECTOR_LIST;
-	//private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
+	// private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
 
 	static Scanner INPUT_SCANNER = new Scanner(System.in);
 
+	private static long TIME = 1000000;
+
 	public static void main(String[] args)
 	{
-		//InitializeMasterLists();
-		//InitializeSectorList();
-		//System.out.printf(SECTOR_LIST.get(0).toString());
+		InitializeMasterLists();
+		InitializeSectorList();
+		System.out.printf(SECTOR_LIST.get(0).toString());
 
 		View v = new View();
+		for (Sector sect : SECTOR_LIST)
+		{
+			v.AddSector(sect.getName(), 0, sect.getCoords()[0],
+					sect.getCoords()[1]);
+		}
+
+		while (TIME < 1000000)
+		{
+			Pulse();
+		}
 		// return 0;
 	}
 
 	private static void InitializeSectorList()
 	{
 		SECTOR_LIST = new ArrayList<>();
-		Sector sect1 = new Sector("Argon Prime");
-		Sector sect2 = new Sector("Power Circle");
-		Sector sect3 = new Sector("Ore Belt");
+		Sector sect1 = new Sector("Argon Prime", 0, 0);
+		Sector sect2 = new Sector("Power Circle", 0, 1);
+		Sector sect3 = new Sector("Ore Belt", 1, 0);
 
 		SECTOR_LIST.add(sect1);
 		SECTOR_LIST.add(sect2);
@@ -92,4 +105,68 @@ public class Controller
 			sec.Pulse();
 		}
 	}
+
+	// Because of the issues involved in properly spacing out the production and
+	// consumption strings, this may work better returning three separate
+	// strings. The other options are inefficient, requiring multiple list
+	// traversals to assemble the proper information; on the other hand, it
+	// means that information will not be properly aligned.
+	public static String GetStats(int sectorID)
+	{
+		StringBuilder sb = new StringBuilder();
+		Sector sect = SECTOR_LIST.get(sectorID);
+		int key, value;
+
+		sb.append("Name: " + sect.getName() + "\n\n");
+		sb.append("Produces\t    Consumes\n");
+		HashMap<Integer, Integer> demand = sect.getResourceDemand();
+		HashMap<Integer, Integer> supply = sect.getResourceSupply();
+
+		// Clever, but not useful right now
+		for (Entry<Integer, Integer> res : demand.entrySet())
+		{
+			key = res.getKey();
+			value = res.getValue();
+			// The lambda expression requires the full res.GetKey()
+			supply.merge(key, value, (oldValue, newValue) -> {
+				supply.put(res.getKey(), newValue);
+				return oldValue;
+			});
+		}/**/
+
+		for (Entry<Integer, Integer> res : supply.entrySet())
+		{
+			key = res.getKey();
+			value = res.getValue();
+			if (key < 0)
+				continue;
+			if (supply.containsKey(-key))
+			{
+				sb.append(String.format(ResourceRound(value) + " %1$-15s"
+						+ ResourceRound(Math.abs(supply.get(-key))) + " %1$-15s\n",
+						MASTER_RESOURCE_LIST.get(key)));
+			} else if (value < 0)
+			{
+				sb.append(String.format(
+						"\t    " + ResourceRound(value)
+								+ " %1$-15s\n", MASTER_RESOURCE_LIST.get(key)));
+			} else
+			{
+				sb.append(String.format(ResourceRound(value)
+						+ " %1$-15s\n", MASTER_RESOURCE_LIST.get(key)));
+			}
+		}
+
+		return sb.toString();
+	}
+
+	private static String ResourceRound(int value)
+	{
+		// TODO Auto-generated method stub
+		return Integer.toString(value);
+	}
+
+	// Constants
+	public static int MAX_TRAVEL_DISTANCE = 2;
+	public static int DEMAND_DISTANCE = 1;
 }

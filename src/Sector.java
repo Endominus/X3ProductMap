@@ -15,10 +15,12 @@ public class Sector
 	private HashMap<Integer, Integer> resourceSupply = new HashMap<>();
 	private HashMap<Integer, Integer> resourceStockpile = new HashMap<>();
 	private int distance;
+	private int[] coords;
 
-	public Sector(String n)
+	public Sector(String n, int x, int y)
 	{
 		this.name = n;
+		this.coords = new int[] {x, y};
 	}
 
 	public int NetFlow(int id)
@@ -152,6 +154,11 @@ public class Sector
 	public String getName()
 	{
 		return name;
+	}
+	
+	public int[] getCoords()
+	{
+		return this.coords;
 	}
 
 	public HashMap<Integer, Integer> getResourceSupply()
@@ -329,5 +336,10 @@ public class Sector
 	public HashMap<Integer, Integer> getResourceStockpile()
 	{
 		return resourceStockpile;
+	}
+
+	public HashMap<Integer, Integer> getResourceDemand()
+	{
+		return this.resourceDemand;
 	}
 }

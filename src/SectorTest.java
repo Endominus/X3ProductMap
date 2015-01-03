@@ -13,7 +13,7 @@ public class SectorTest
 	public void setUp() throws Exception
 	{
 		Controller.main(null);
-		this.sect = new Sector("A");
+		this.sect = new Sector("A", 1, 1);
 		Factory fact = new Factory(0, 'A', 'M');
 		this.sect.AddFactory(fact);
 	}
