@@ -1,0 +1,107 @@
+0,1 GJ Shield,311636,1
+1,1 MJ Shield,5192,1
+2,10 GJ Shield,779088,1
+3,125 MJ Shield,155816,1
+4,25 MJ Shield,85700,1
+5,5 MJ Shield,20776,1
+6,Advanced Satellite,12128,1
+7,Alpha FAA,465115,1
+8,Alpha HEPT,139535,1
+9,Alpha IRE,3100,1
+10,Alpha PAC,23255,1
+11,Alpha PBE,232559,1
+12,Alpha PPC,465115,1
+13,Alpha PSG,93025,1
+14,Argnu Beef,104,0
+15,Aurora Missile,2020,1
+16,Beta FAA,623268,1
+17,Beta HEPT,249308,1
+18,Beta IRE,4676,1
+19,Beta PAC,38956,1
+20,Beta PBE,389544,1
+21,Beta PPC,701180,1
+22,Beta PSG,272680,1
+23,BoFu,292,0
+24,BoGas,380,0
+26,Chelts Meat,104,0
+25,Cloth Rimes,292,0
+27,Computer Components,1348,0
+28,Crystals,1684,0
+29,Cyclone Missile,20216,1
+30,Delexian Wheat,32,0
+31,Dragonfly Missile,1012,1
+32,Energy Cells,16,0
+33,Fighter Drone,4044,1
+34,Firefly Missile,224,1
+35,Firestorm Torpedo,80856,1
+36,Gamma PPC,973860,1
+37,Gamma PSG,623268,1
+38,Hornet Missile,10108,1
+39,Hurricane Missile,4044,1
+40,Ion Disruptor,280472,1
+41,Lasertower,151608,1
+42,Maja Snails,156,0
+43,Majaglit,36,0
+44,Mass Driver,116864,1
+45,Mass Driver Ammunition,665,1
+46,Massom Powder,36,0
+47,Meatsteak Cahoonas,72,0
+48,Microchips,13476,0
+49,Mobile Drilling System,77908,1
+50,Mosquito Missile,168,1
+51,Navigation Relay Satellite,6740,1
+52,Nividium,16100,1
+53,Nostrop Oil,72,0
+54,Ore,128,0
+55,Plankton,20,0
+56,Quantum Tubes,3368,0
+57,Rastar Oil,484,0
+58,Scruffin Fruits,20,0
+59,Silicon Wafers,504,0
+60,Silkworm Missile,5052,1
+61,Soja Beans,28,0
+62,Soja Husk,364,0
+63,Space Fuel,728,1
+64,Space Weed,2912,0
+65,Spaceflies,3088,0
+66,SQUASH Mine,10108,1
+67,Stott Spices,72,0
+68,Sunrise Flowers,20,0
+69,Swamp Plant,156,0
+70,Teladianium,156,0
+71,Tempest Missile,13476,1
+72,Thunderbolt Missile,8424,1
+73,Tornado Missile,16844,1
+74,Tractor Beam,779088,1
+75,Typhoon Missile,33692,1
+76,Warheads,224,0
+77,Wasp Missile,1348,1
+...
+100,Tomahawk Heavy Missile,22460,1
+101,Recon Drone,28076,1
+102,Terran EMP Rifles,53904,1
+103,Disintegrator Rifles,26952,1
+104,Hull Plating,224,1
+105,Low-yield Sidearms,13476,1
+106,Ice,128,1
+107,Terran MRE,292,1
+108,C-Ration,72,1
+109,Vita Kai,104,1
+110,Water,32,1
+111,Protein Paste,32,1
+112,Flavour Pack,104,1
+113,Carbo Cake,32,1
+114,Prototype Starburst Shockwave Cannon,623268,1
+115,Point Singularity Projector,1029952,1
+116,Starburst Shockwave Cannon,623268,1
+117,Experimental Electro-Magnetic Plasma Cannon,323712,1
+118,Hammer Heavy Torpedo,50536,1
+119,Flail Barrage Missile,33692,1
+120,Boarding Pods,80856,1
+121,Poltergeist Missile,3368,1
+122,Wraith Missile,33692,1
+123,Spectre Missile,7860,1
+124,Shadow Missile,53344,1
+125,Ghoul Missile,33692,1
+126,Phantom Missile,22460,1
+127,Cluster Flak Array,638582,1

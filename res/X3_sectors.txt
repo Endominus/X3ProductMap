@@ -1,0 +1,59 @@
+id:0
+name:SectorA
+coords:0,0
+stations:
+	-station_id:57
+	race:A
+	size:M
+	yield:100
+	-station_id:41
+	race:A
+	size:M
+	yield:25
+linked_sectors:
+	-sector_id:1
+	-sector_id:2
+---
+id:1
+name:SectorB
+coords:1,0
+stations:
+	-station_id:21
+	race:A
+	size:L
+	-station_id:40
+	race:A
+	size:S
+linked_sectors:
+	-sector_id:0
+	-sector_id:3
+---
+id:2
+name:SectorC
+coords:0,1
+stations:
+	-station_id:25
+	race:A
+	size:M
+	-station_id:40
+	race:A
+	size:S
+linked_sectors:
+	-sector_id:0
+	-sector_id:3
+---
+id:3
+name:SectorD
+coords:1,1
+stations:
+	-station_id:20
+	race:A
+	size:L
+	-station_id:54
+	race:A
+	size:M
+	yield:25
+linked_sectors:
+	-sector_id:1
+	-sector_id:2
+...

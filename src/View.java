@@ -12,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -66,7 +65,8 @@ public class View extends JFrame implements ActionListener
 		newFactoryButton.setFont(new Font(null, Font.PLAIN, 20));
 		this.buttonPanel.add(newFactoryButton);
 		
-		this.statsText = new JTextArea("Argon Prime\nWhee");
+		this.statsText = new JTextArea();
+		this.statsText.setEditable(false);
 		this.statsPane = new JScrollPane(this.statsText);
 		this.statsPane.setPreferredSize(new Dimension(400, 450));
 		this.statsText.setFont(new Font(null, Font.PLAIN, 20));
@@ -102,17 +102,17 @@ public class View extends JFrame implements ActionListener
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		String name;
+		//String name;
 		int ycoord, xcoord;
 		int id;
 		
 		public SectorButton(String name, int id, int x, int y)
 		{
 			super();
-			this.setIcon(new ImageIcon("C:\\Users\\Endominus\\Pictures\\SectorImage.png"));
+			this.setIcon(new ImageIcon("res/SectorImage.png"));
 			this.setBorderPainted(false);
 			this.setContentAreaFilled(false);
-			this.name = name;
+			//this.name = name;
 			this.id = id;
 			this.xcoord = x;
 			this.ycoord = y;
