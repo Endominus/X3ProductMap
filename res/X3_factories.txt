@@ -1,5 +1,6 @@
 id:0
 name:Advanced Satellite Factory
+size:S
 wares:
 	-ware_id:6
 	 ware_amount:8.33
@@ -12,11 +13,12 @@ wares:
 ---
 id:1
 name:Alpha Flak Artillery Forge
+size:S
 wares:
 	-ware_id:7
 	 ware_amount:0.28
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -24,11 +26,12 @@ wares:
 ---
 id:2
 name:Alpha HEPT Forge
+size:S
 wares:
 	-ware_id:8
 	 ware_amount:1
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -36,11 +39,12 @@ wares:
 ---
 id:3
 name:Alpha IRE Forge
+size:S
 wares:
 	-ware_id:9
 	 ware_amount:34.62
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -48,11 +52,12 @@ wares:
 ---
 id:4
 name:Alpha PAC Forge
+size:S
 wares:
 	-ware_id:10
 	 ware_amount:5.22
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -60,11 +65,12 @@ wares:
 ---
 id:5
 name:Alpha PBE Forge
+size:S
 wares:
 	-ware_id:11
 	 ware_amount:0.63
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -72,11 +78,12 @@ wares:
 ---
 id:6
 name:Alpha PPC Forge
+size:S
 wares:
 	-ware_id:12
 	 ware_amount:0.33
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -84,11 +91,12 @@ wares:
 ---
 id:7
 name:Alpha PSG Forge
+size:S
 wares:
 	-ware_id:13
 	 ware_amount:1.43
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -96,11 +104,12 @@ wares:
 ---
 id:8
 name:Ammunition Factory
+size:S
 wares:
 	-ware_id:45
 	 ware_amount:171.43
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -108,11 +117,12 @@ wares:
 ---
 id:9
 name:Aurora Missile Factory
+size:S
 wares:
 	-ware_id:15
 	 ware_amount:52.94
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -120,11 +130,12 @@ wares:
 ---
 id:10
 name:Beta Flak Artillery Forge
+size:S
 wares:
 	-ware_id:16
 	 ware_amount:0.28
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -132,11 +143,12 @@ wares:
 ---
 id:11
 name:Beta HEPT Forge
+size:S
 wares:
 	-ware_id:17
 	 ware_amount:1
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -144,11 +156,12 @@ wares:
 ---
 id:12
 name:Beta IRE Forge
+size:S
 wares:
 	-ware_id:18
 	 ware_amount:34.62
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -156,11 +169,12 @@ wares:
 ---
 id:13
 name:Beta PAC Forge
+size:S
 wares:
 	-ware_id:19
 	 ware_amount:5.22
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -168,11 +182,12 @@ wares:
 ---
 id:14
 name:Beta PBE Forge
+size:S
 wares:
 	-ware_id:20
 	 ware_amount:0.63
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -180,11 +195,12 @@ wares:
 ---
 id:15
 name:Beta PPC Forge
+size:S
 wares:
 	-ware_id:21
 	 ware_amount:0.33
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -192,11 +208,12 @@ wares:
 ---
 id:16
 name:Beta PSG Forge
+size:S
 wares:
 	-ware_id:22
 	 ware_amount:1.43
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -204,6 +221,7 @@ wares:
 ---
 id:17
 name:Bio Gas Factory
+size:M
 wares:
 	-ware_id:24
 	 ware_amount:50
@@ -212,6 +230,7 @@ wares:
 ---
 id:18
 name:Bliss Place
+size:M
 wares:
 	-ware_id:64
 	 ware_amount:16.67
@@ -222,6 +241,7 @@ wares:
 ---
 id:19
 name:Bofu Chemical Lab
+size:M
 wares:
 	-ware_id:23
 	 ware_amount:150
@@ -232,6 +252,7 @@ wares:
 ---
 id:20
 name:Cahoona Bakery
+size:M
 wares:
 	-ware_id:47
 	 ware_amount:600
@@ -242,6 +263,7 @@ wares:
 ---
 id:21
 name:Cattle Ranch
+size:M
 wares:
 	-ware_id:14
 	 ware_amount:180
@@ -250,6 +272,7 @@ wares:
 ---
 id:22
 name:Chelt Spaace Aquarium
+size:M
 wares:
 	-ware_id:26
 	 ware_amount:180
@@ -258,11 +281,12 @@ wares:
 ---
 id:23
 name:Chip Plant
+size:S
 wares:
 	-ware_id:48
 	 ware_amount:10
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -270,11 +294,12 @@ wares:
 ---
 id:24
 name:Computer Plant
+size:S
 wares:
 	-ware_id:27
 	 ware_amount:75
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -282,11 +307,12 @@ wares:
 ---
 id:25
 name:Crystal Fab
+size:S
 wares:
 	-ware_id:28
 	 ware_amount:60
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -294,11 +320,12 @@ wares:
 ---
 id:26
 name:Dragonfly Missile Factory
+size:S
 wares:
 	-ware_id:31
 	 ware_amount:92.31
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -306,6 +333,7 @@ wares:
 ---
 id:27
 name:Dream Farm
+size:M
 wares:
 	-ware_id:69
 	 ware_amount:240
@@ -314,6 +342,7 @@ wares:
 ---
 id:28
 name:Drone Factory
+size:S
 wares:
 	-ware_id:33
 	 ware_amount:13.58
@@ -326,11 +355,12 @@ wares:
 ---
 id:29
 name:Firefly Missile Factory
+size:S
 wares:
 	-ware_id:34
 	 ware_amount:400
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -338,11 +368,12 @@ wares:
 ---
 id:30
 name:Firestorm Torpedo Factory
+size:S
 wares:
 	-ware_id:35
 	 ware_amount:1.88
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -350,6 +381,7 @@ wares:
 ---
 id:31
 name:Flower Farm
+size:M
 wares:
 	-ware_id:68
 	 ware_amount:900
@@ -358,11 +390,12 @@ wares:
 ---
 id:32
 name:Gamma PPC Forge
+size:S
 wares:
 	-ware_id:36
 	 ware_amount:0.18
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -370,11 +403,12 @@ wares:
 ---
 id:33
 name:Gamma PSG Forge
+size:S
 wares:
 	-ware_id:37
 	 ware_amount:0.27
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -382,11 +416,12 @@ wares:
 ---
 id:34
 name:Hornet Missile Factory
+size:S
 wares:
 	-ware_id:38
 	 ware_amount:12.56
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -394,11 +429,12 @@ wares:
 ---
 id:35
 name:Ion Disruptor Forge
+size:S
 wares:
 	-ware_id:40
 	 ware_amount:0.6
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -406,11 +442,12 @@ wares:
 ---
 id:36
 name:Lasertower Factory
+size:S
 wares:
 	-ware_id:41
 	 ware_amount:0.64
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -418,11 +455,12 @@ wares:
 ---
 id:37
 name:Mass Driver Forge
+size:S
 wares:
 	-ware_id:44
 	 ware_amount:1.07
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -430,6 +468,7 @@ wares:
 ---
 id:38
 name:Massom Mill
+size:M
 wares:
 	-ware_id:46
 	 ware_amount:1200
@@ -440,11 +479,12 @@ wares:
 ---
 id:39
 name:Mobile Drilling System Factory
+size:S
 wares:
 	-ware_id:49
 	 ware_amount:1.58
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -452,11 +492,12 @@ wares:
 ---
 id:40
 name:Mosquito Missile Factory
+size:S
 wares:
 	-ware_id:50
 	 ware_amount:514.29
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -464,6 +505,7 @@ wares:
 ---
 id:41
 name:Ore Mine
+size:M
 wares:
 	-ware_id:54
 	 ware_amount:150
@@ -472,6 +514,7 @@ wares:
 ---
 id:42
 name:Plankton Farm
+size:M
 wares:
 	-ware_id:55
 	 ware_amount:900
@@ -480,11 +523,12 @@ wares:
 ---
 id:43
 name:Quantum Tube Fab
+size:S
 wares:
 	-ware_id:56
 	 ware_amount:36
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:59
 	 ware_amount:-37.5
 	-ware_id:32
@@ -492,6 +536,7 @@ wares:
 ---
 id:44
 name:Rastar Refinery
+size:M
 wares:
 	-ware_id:57
 	 ware_amount:90
@@ -502,6 +547,7 @@ wares:
 ---
 id:45
 name:Rimes Fact
+size:M
 wares:
 	-ware_id:25
 	 ware_amount:150
@@ -512,6 +558,7 @@ wares:
 ---
 id:46
 name:Satellite Factory
+size:S
 wares:
 	-ware_id:51
 	 ware_amount:6.82
@@ -524,6 +571,7 @@ wares:
 ---
 id:47
 name:Scruffin Farm
+size:M
 wares:
 	-ware_id:58
 	 ware_amount:900
@@ -532,11 +580,12 @@ wares:
 ---
 id:48
 name:Shield Production Facility 1 MJ
+size:S
 wares:
 	-ware_id:40
 	 ware_amount:20
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -544,11 +593,12 @@ wares:
 ---
 id:49
 name:Shield Production Facility 5 MJ
+size:S
 wares:
 	-ware_id:41
 	 ware_amount:5.29
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -556,11 +606,12 @@ wares:
 ---
 id:50
 name:Shield Production Facility 25 MJ
+size:S
 wares:
 	-ware_id:42
 	 ware_amount:1.43
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -568,11 +619,12 @@ wares:
 ---
 id:51
 name:Shield Production Facility 125 MJ
+size:S
 wares:
 	-ware_id:43
 	 ware_amount:0.88
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -580,23 +632,25 @@ wares:
 ---
 id:52
 name:Shield Production Facility 1 GJ
+size:S
 wares:
 	-ware_id:44
 	 ware_amount:0.48
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
 	 ware_amount:-900
 ---
 id:53
-name:Shield Production Facility 1
+name:Shield Production Facility 10 GJ
+size:S
 wares:
 	-ware_id:45
 	 ware_amount:0.21
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -604,6 +658,7 @@ wares:
 ---
 id:54
 name:Silicon Mine
+size:M
 wares:
 	-ware_id:59
 	 ware_amount:38.71
@@ -612,11 +667,12 @@ wares:
 ---
 id:55
 name:Silkworm Missile Factory
+size:S
 wares:
 	-ware_id:60
 	 ware_amount:21.82
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -624,6 +680,7 @@ wares:
 ---
 id:56
 name:Snail Ranch
+size:M
 wares:
 	-ware_id:42
 	 ware_amount:120
@@ -632,6 +689,7 @@ wares:
 ---
 id:57
 name:Solar Power Plant
+size:M
 wares:
 	-ware_id:32
 	 ware_amount:8420.34
@@ -640,6 +698,7 @@ wares:
 ---
 id:58
 name:Soyery
+size:M
 wares:
 	-ware_id:62
 	 ware_amount:120
@@ -650,6 +709,7 @@ wares:
 ---
 id:59
 name:Soyfarm
+size:M
 wares:
 	-ware_id:61
 	 ware_amount:720
@@ -658,6 +718,7 @@ wares:
 ---
 id:60
 name:Space Fuel Distillery
+size:S
 wares:
 	-ware_id:63
 	 ware_amount:72
@@ -668,6 +729,7 @@ wares:
 ---
 id:61
 name:Space Jewellery
+size:M
 wares:
 	-ware_id:43
 	 ware_amount:1200
@@ -678,18 +740,20 @@ wares:
 ---
 id:62
 name:SQUASH Mine Factory
+size:S
 wares:
 	-ware_id:66
 	 ware_amount:5.3
 	-ware_id:54
 	 ware_amount:-150
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:32
 	 ware_amount:-900
 ---
 id:63
 name:Stott Mixery
+size:M
 wares:
 	-ware_id:67
 	 ware_amount:600
@@ -700,6 +764,7 @@ wares:
 ---
 id:64
 name:Sun Oil Refinery
+size:M
 wares:
 	-ware_id:53
 	 ware_amount:600
@@ -710,6 +775,7 @@ wares:
 ---
 id:65
 name:Teladianium Foundry
+size:M
 wares:
 	-ware_id:70
 	 ware_amount:120
@@ -718,11 +784,12 @@ wares:
 ---
 id:66
 name:Tempest Missile Factory
+size:S
 wares:
 	-ware_id:71
 	 ware_amount:10
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -730,11 +797,12 @@ wares:
 ---
 id:67
 name:Thunderbolt Missile Factory
+size:S
 wares:
 	-ware_id:72
 	 ware_amount:13.33
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -742,21 +810,23 @@ wares:
 ---
 id:68
 name:Tractor Beam Factory
+size:S
 wares:
 	-ware_id:74
 	 ware_amount:0.23
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:32
 	 ware_amount:-900
 ---
 id:69
 name:Typhoon Missile Factory
+size:S
 wares:
 	-ware_id:75
 	 ware_amount:4.17
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -764,11 +834,12 @@ wares:
 ---
 id:70
 name:Wasp Missile Factory
+size:S
 wares:
 	-ware_id:77
 	 ware_amount:75
-	-ware_id:RACE
-	 ware_amount:RACE
+	-ware_id:-1
+	 ware_amount:-1
 	-ware_id:54
 	 ware_amount:-150
 	-ware_id:32
@@ -776,6 +847,7 @@ wares:
 ---
 id:71
 name:Weapon Component Factory
+size:S
 wares:
 	-ware_id:76
 	 ware_amount:400
@@ -788,9 +860,11 @@ wares:
 ---
 id:72
 name:Wheat Farm
+size:M
 wares:
 	-ware_id:30
 	 ware_amount:600
 	-ware_id:32
 	 ware_amount:-900
+---
 ...

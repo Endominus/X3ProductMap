@@ -28,17 +28,18 @@ public class DatabaseShell
 			RefreshTables();
 
 			GenerateWares();
+			GenerateFactories();
 			
 			//statement.executeUpdate("insert into ware values(0, 'Energy Cells', 14, 1)");
 			//statement.executeUpdate("insert into ware values(1, 'Energy Cellsa', 14, 0)");
 			
-			ResultSet rs = statement.executeQuery("select * from ware");
+			ResultSet rs = statement.executeQuery("select * from factory");
 			while (rs.next())
 			{
 				// read the result set
 				System.out.println("name = " + rs.getString("name"));
-				//System.out.println("id = " + rs.getInt("id"));
-				System.out.println("product = " + rs.getBoolean("product"));
+				System.out.println("id = " + rs.getInt("id"));
+				//System.out.println("product = " + rs.getBoolean("product"));
 			}
 			
 		} catch (SQLException | IOException e)
@@ -58,6 +59,42 @@ public class DatabaseShell
 				System.err.println(e);
 			}
 		}
+	}
+
+	private static void GenerateFactories() throws FileNotFoundException,
+			SQLException, IOException
+	{
+		String name, line, id, wareid, wareamount, size;
+		
+		FileReader fin = new FileReader("res/X3_factories.txt");
+		Scanner scanner = new Scanner(fin);
+		line = scanner.nextLine();
+		
+		while (!line.equals("..."))
+		{
+			id = line.split(":")[1];
+			name = scanner.nextLine().split(":")[1];
+			size = scanner.nextLine().split(":")[1];
+			
+			statement.executeUpdate(String.format("insert into factory values(%1s, '%2s', '%3s')", id, name, size));
+
+			line = scanner.nextLine();
+			line = scanner.nextLine();
+			while (!line.equals("---"))
+			{
+				wareid = line.split(":")[1];
+				wareamount = scanner.nextLine().split(":")[1];
+				
+				statement.executeUpdate(String.format("insert into factoryio values(%1s, %2s, %3s)", id, wareid, wareamount));
+				
+				line = scanner.nextLine();
+			}
+
+			line = scanner.nextLine();
+		}
+
+		scanner.close();
+		fin.close();
 	}
 
 	private static void GenerateWares() throws FileNotFoundException,
