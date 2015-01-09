@@ -56,4 +56,5 @@ stations:
 linked_sectors:
 	-sector_id:1
 	-sector_id:2
+---
 ...

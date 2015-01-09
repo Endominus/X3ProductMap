@@ -29,6 +29,7 @@ public class DatabaseShell
 
 			GenerateWares();
 			GenerateFactories();
+			GenerateSectors();
 			
 			//statement.executeUpdate("insert into ware values(0, 'Energy Cells', 14, 1)");
 			//statement.executeUpdate("insert into ware values(1, 'Energy Cellsa', 14, 0)");
@@ -59,6 +60,57 @@ public class DatabaseShell
 				System.err.println(e);
 			}
 		}
+	}
+
+	private static void GenerateSectors() throws SQLException, IOException
+	{
+		String name, line, x, y, id, factid, race, size, yield;
+		FileReader fin = new FileReader("res/X3_sectors.txt");
+		Scanner scanner = new Scanner(fin);
+		line = scanner.nextLine();
+		
+		//while (scanner.hasNextLine())
+		while (!line.equals("..."))
+		{
+			id = line.split(":")[1];
+			name = scanner.nextLine().split(":")[1];
+			line = scanner.nextLine().split(":")[1];
+			x = line.split(",")[0];
+			y = line.split(",")[1];
+			
+			statement.executeUpdate(String.format("insert into sector values(%1s, '%2s', %3s, %4s)", id, name, x, y));
+			
+			scanner.nextLine();
+			line = scanner.nextLine();
+			
+			while (!line.equals("linked_sectors:"))
+			{
+				yield = "0";
+				factid = line.split(":")[1];
+				race = scanner.nextLine().split(":")[1];
+				size = scanner.nextLine().split(":")[1];
+				
+				line = scanner.nextLine();
+				if (line.split(":")[0].equals("yield"))
+				{
+					yield = line.split(":")[1];
+					line = scanner.nextLine();
+				}
+				
+				statement.executeUpdate(String.format("insert into sectorcontent values(%1s, %2s, %3s, %4s, %5s)", id, factid, race, size, yield));
+			}
+			
+			ResultSet rs = statement.executeQuery("select sect1id from sectorlink where sect2id = " + id);
+			
+			while (!line.equals("---"))
+			{
+				//rs.
+			}
+		}
+		
+		scanner.close();
+		fin.close();
+		
 	}
 
 	private static void GenerateFactories() throws FileNotFoundException,
@@ -140,7 +192,7 @@ public class DatabaseShell
 		statement
 				.executeUpdate("create table factory (id integer primary key, name text, size text)");
 		statement
-				.executeUpdate("create table sector (id integer primary key, name text)");
+				.executeUpdate("create table sector (id integer primary key, name text, x integer, y integer)");
 		statement
 				.executeUpdate("create table factoryio (factoryid integer, wareid integer, amount real, foreign key (factoryid) references factory(id), foreign key (wareid) references ware(id))");
 		statement
