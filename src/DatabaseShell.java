@@ -26,7 +26,7 @@ public class DatabaseShell
 			statement = connection.createStatement();
 			statement.setQueryTimeout(30); // set timeout to 30 sec.
 
-			RefreshTables();
+			//RefreshTables();
 
 			GenerateWares();
 			GenerateFactories();
@@ -219,7 +219,7 @@ public class DatabaseShell
 				.executeUpdate("create table sectorcontent (sectid integer, factid integer, race text, size text, yield real, foreign key (sectid) references sector(id), foreign key (factid) references factory(id))");
 	}
 
-	public ResultSet GetWares()
+	public static ResultSet GetWares()
 	{
 		try
 		{
@@ -232,7 +232,7 @@ public class DatabaseShell
 		return null;
 	}
 
-	public ResultSet GetFactories()
+	public static ResultSet GetFactories()
 	{
 		try
 		{
@@ -245,7 +245,7 @@ public class DatabaseShell
 		return null;
 	}
 
-	public ResultSet GetFactoryIO(int id)
+	public static ResultSet GetFactoryIO(int id)
 	{
 		try
 		{
@@ -258,7 +258,7 @@ public class DatabaseShell
 		return null;
 	}
 
-	public ResultSet GetSectors()
+	public static ResultSet GetSectors()
 	{
 		try
 		{
@@ -271,7 +271,7 @@ public class DatabaseShell
 		return null;
 	}
 
-	public ResultSet GetSectorContents(int id)
+	public static ResultSet GetSectorContents(int id)
 	{
 		try
 		{
@@ -284,7 +284,7 @@ public class DatabaseShell
 		return null;
 	}
 
-	public ResultSet GetSectorLinks()
+	public static ResultSet GetSectorLinks()
 	{
 		try
 		{
@@ -297,7 +297,7 @@ public class DatabaseShell
 		return null;
 	}
 	
-	public boolean IsWareProduct(int id)
+	public static boolean IsWareProduct(int id)
 	{
 
 		try

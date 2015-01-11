@@ -1,7 +1,10 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class Controller
@@ -11,6 +14,7 @@ public class Controller
 	public static Hashtable<Integer, String> MASTER_RESOURCE_LIST;
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
 	private static ArrayList<Sector> SECTOR_LIST;
+	private static PriorityQueue<Ship> ShipQueue = new PriorityQueue<>();
 	// private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
 
 	static Scanner INPUT_SCANNER = new Scanner(System.in);
@@ -34,8 +38,9 @@ public class Controller
 		while (TIME < 1000000)
 		{
 			Pulse();
-		}
+		}/**/
 		// return 0;
+		
 	}
 
 	private static void InitializeSectorList()
@@ -64,28 +69,43 @@ public class Controller
 
 	private static void InitializeMasterLists()
 	{
-		MASTER_RESOURCE_LIST = new Hashtable<>();
-		MASTER_RESOURCE_LIST.put(0, "Energy");
-		MASTER_RESOURCE_LIST.put(1, "Food");
-		MASTER_RESOURCE_LIST.put(2, "Ore");
-		MASTER_RESOURCE_LIST.put(3, "Product");
+		try
+		{
+			ResultSet rs = DatabaseShell.GetWares();
+			
+			while (rs.next())
+			{
+				MASTER_RESOURCE_LIST.put(rs.getInt(1), rs.getString(2));
+			}
+			rs = DatabaseShell.GetFactories();
+			ArrayList<double[]> io = new ArrayList<>();
+			int id;
+			String name;
+			char size;
+			Factory f;
+			
+			MASTER_FACTORY_LIST = new Hashtable<>();
+			while (rs.next())
+			{
+				id = rs.getInt(0);
+				name = rs.getString(1);
+				size = rs.getString(0).charAt(0);
+				
+				ResultSet wares = DatabaseShell.GetFactoryIO(id);
 
-		// Factory f = Factory([[0,0], [1, 1]], 0, 'M');
-
-		MASTER_FACTORY_LIST = new Hashtable<>();
-		Factory f = new Factory(new int[][] { { 0, 100 } }, 0, 'M',
-				"Solar Power Plant");
-		MASTER_FACTORY_LIST.put(0, f);
-		f = new Factory(new int[][] { { 1, 100 }, { 0, -20 } }, 1, 'M',
-				"Wheat Farm");
-		MASTER_FACTORY_LIST.put(1, f);
-		f = new Factory(new int[][] { { 2, 100 }, { 0, -20 } }, 2, 'M',
-				"Ore Mine");
-		MASTER_FACTORY_LIST.put(2, f);
-		f = new Factory(new int[][] { { 3, 100 }, { 0, -20 }, { 1, -50 },
-				{ 2, -50 } }, 3, 'S', "Weapon Component Factory");
-		MASTER_FACTORY_LIST.put(3, f);
-
+				while (wares.next())
+				{
+					io.add(new double[] {wares.getInt(2), wares.getDouble(2)});
+				}
+				
+				f = new Factory(io, id, size, name);
+				MASTER_FACTORY_LIST.put(id, f);
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static void LinkSectors(Sector sect1, Sector sect2)
@@ -99,7 +119,7 @@ public class Controller
 	 * steps; 1. Production using stockpiled resources 2. Searching for
 	 * somewhere to offload produced resources
 	 */
-	private static void Pulse()
+	public static void Pulse()
 	{
 		for (Sector sec : SECTOR_LIST)
 		{

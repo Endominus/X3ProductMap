@@ -1,16 +1,17 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Factory
 {
 
-	private int[][] resDemanded;
-	private int[][] resStockpiled;
+	private double[][] resDemanded;
+	private double[][] resStockpiled;
 	private int template;
 	private char size;
 	private char race;
 	private String name;
 
-	public Factory(int[][] res, int t, char s, String n)
+	public Factory(double[][] res, int t, char s, String n)
 	{
 		this.resDemanded = Arrays.copyOf(res, res.length);
 		this.template = t;
@@ -22,9 +23,9 @@ public class Factory
 	{
 		Factory factoryTemplate = Controller.MASTER_FACTORY_LIST
 				.get(defaultType);
-		int[][] resources = factoryTemplate.getResources().clone();
-		this.resDemanded = new int[resources.length][2];
-		this.resStockpiled = new int[resources.length][2];
+		double[][] resources = factoryTemplate.getResources().clone();
+		this.resDemanded = new double[resources.length][2];
+		this.resStockpiled = new double[resources.length][2];
 		for (int i = 0; i < resources.length; i++)
 		{
 			this.resDemanded[i] = resources[i].clone();
@@ -46,6 +47,19 @@ public class Factory
 
 	}
 
+	public Factory(ArrayList<double[]> io, int t, char s, String n)
+	{
+		this.resDemanded = new double[io.size()][2];
+		int i = 0;
+		for (double[] res : io)
+		{
+			this.resDemanded[i++] = res;
+		}
+		this.template = t;
+		this.size = s;
+		this.name = n;
+	}
+
 	private void CorrectRacialResources()
 	{
 		// TODO Implement racial resources
@@ -63,9 +77,9 @@ public class Factory
 		// TODO Implement yield calculations
 	}
 
-	public int[][] Produce()
+	public double[][] Produce()
 	{
-		int[] prod = this.resDemanded[0];
+		double[] prod = this.resDemanded[0];
 		double ratio = SatisfactionRatio();
 		prod[1] *= ratio;
 		ConsumeResources(ratio);
@@ -82,13 +96,13 @@ public class Factory
 		}
 	}
 
-	public void AddToStockpile(int[] res)
+	public void AddToStockpile(double[] prod)
 	{
-		for (int[] dem : this.resStockpiled)
+		for (double[] dem : this.resStockpiled)
 		{
-			if (res[0] == dem[0])
+			if (prod[0] == dem[0])
 			{
-				dem[1] += res[1];
+				dem[1] += prod[1];
 				break;
 			}
 		}
@@ -149,7 +163,7 @@ public class Factory
 		return sb.toString();
 	}
 
-	public int[][] getResources()
+	public double[][] getResources()
 	{
 		return resDemanded;
 	}
