@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DatabaseShell
@@ -34,14 +35,14 @@ public class DatabaseShell
 			//statement.executeUpdate("insert into ware values(0, 'Energy Cells', 14, 1)");
 			//statement.executeUpdate("insert into ware values(1, 'Energy Cellsa', 14, 0)");
 			
-			ResultSet rs = statement.executeQuery("select * from factory");
+			/*ResultSet rs = statement.executeQuery("select * from sector");
 			while (rs.next())
 			{
 				// read the result set
 				System.out.println("name = " + rs.getString("name"));
 				System.out.println("id = " + rs.getInt("id"));
-				//System.out.println("product = " + rs.getBoolean("product"));
-			}
+				System.out.println("coords = " + rs.getInt("x") + "," + rs.getInt("y"));
+			}/**/
 			
 		} catch (SQLException | IOException e)
 		{
@@ -91,21 +92,38 @@ public class DatabaseShell
 				size = scanner.nextLine().split(":")[1];
 				
 				line = scanner.nextLine();
-				if (line.split(":")[0].equals("yield"))
+				if (line.split(":")[0].equals("\tyield"))
 				{
 					yield = line.split(":")[1];
 					line = scanner.nextLine();
 				}
 				
-				statement.executeUpdate(String.format("insert into sectorcontent values(%1s, %2s, %3s, %4s, %5s)", id, factid, race, size, yield));
+				statement.executeUpdate(String.format("insert into sectorcontent values(%1s, %2s, '%3s', '%4s', %5s)", id, factid, race, size, yield));
+				//System.out.println(line);
 			}
 			
 			ResultSet rs = statement.executeQuery("select sect1id from sectorlink where sect2id = " + id);
+			ArrayList<String> results = new ArrayList<>();
+			while (rs.next())
+			{
+				results.add(rs.getString(1));
+			}
+			line = scanner.nextLine();
 			
 			while (!line.equals("---"))
 			{
-				//rs.
+				line = line.split(":")[1];
+				
+				if (!results.contains(line))
+				{
+					statement.executeUpdate(String.format("insert into sectorlink values(%1s, %2s, 1)", id, line));
+				}
+				
+				line = scanner.nextLine();
+				//System.out.println(line);
 			}
+			
+			line = scanner.nextLine();
 		}
 		
 		scanner.close();
