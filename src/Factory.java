@@ -6,7 +6,7 @@ public class Factory
 
 	private double[][] resDemanded;
 	private double[][] resStockpiled;
-	private int template;
+	private int template, distance;
 	private char size;
 	private char race;
 	private String name;
@@ -19,7 +19,7 @@ public class Factory
 		this.name = n;
 	}
 
-	public Factory(int defaultType, char race, char size)
+	public Factory(int defaultType, char race, char size, int d)
 	{
 		Factory factoryTemplate = Controller.MASTER_FACTORY_LIST
 				.get(defaultType);
@@ -36,6 +36,7 @@ public class Factory
 		this.race = race;
 		this.size = size;
 		this.template = defaultType;
+		this.distance = d;
 
 		CorrectRacialResources();
 
@@ -62,8 +63,36 @@ public class Factory
 
 	private void CorrectRacialResources()
 	{
-		// TODO Implement racial resources
-
+		for (int i = 1; i < this.resDemanded.length; i++)
+		{
+			if (this.resDemanded[i][0] == -1)
+			{
+				switch (this.race)
+				{
+				case 'A':
+					this.resDemanded[i][0] = 47;
+					this.resDemanded[i][0] = 600;
+					break;
+				case 'B':
+					this.resDemanded[i][0] = 23;
+					this.resDemanded[i][0] = 150;
+					break;
+				case 'P':
+					this.resDemanded[i][0] = 62;
+					this.resDemanded[i][0] = 120;
+					break;
+				case 'S':
+					this.resDemanded[i][0] = 57;
+					this.resDemanded[i][0] = 90;
+					break;
+				case 'T':
+					this.resDemanded[i][0] = 53;
+					this.resDemanded[i][0] = 600;
+					break;
+				}
+				break;
+			}
+		}
 	}
 
 	private void AdjustResources(int multiplier, boolean divide)
@@ -186,5 +215,10 @@ public class Factory
 	public String getName()
 	{
 		return name;
+	}
+	
+	public int getDistance()
+	{
+		return distance;
 	}
 }

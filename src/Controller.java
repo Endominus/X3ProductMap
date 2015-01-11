@@ -9,13 +9,11 @@ import java.util.Scanner;
 
 public class Controller
 {
-
-	// TODO Turn the master lists into database tables
 	public static Hashtable<Integer, String> MASTER_RESOURCE_LIST;
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
-	private static ArrayList<Sector> SECTOR_LIST;
-	private static PriorityQueue<Ship> ShipQueue = new PriorityQueue<>();
-	// private ArrayList<Integer[]> resourcesInTransit = new ArrayList<>();
+	private static Hashtable<Integer, Sector> SECTOR_LIST;
+	private static PriorityQueue<Ship> shipQueue = new PriorityQueue<Ship>((sa,
+			sb) -> sa.GetDistance() - sb.GetDistance());
 
 	static Scanner INPUT_SCANNER = new Scanner(System.in);
 
@@ -26,44 +24,87 @@ public class Controller
 		DatabaseShell.InitializeDatabase();
 		InitializeMasterLists();
 		InitializeSectorList();
-		//System.out.printf(SECTOR_LIST.get(0).toString());
 
 		View v = new View();
-		for (Sector sect : SECTOR_LIST)
+		for (Sector sect : SECTOR_LIST.values())
 		{
 			v.AddSector(sect.getName(), 0, sect.getCoords()[0],
 					sect.getCoords()[1]);
 		}
 
-		while (TIME < 1000000)
-		{
-			Pulse();
-		}/**/
+		/*
+		 * while (TIME < 1000000) { Pulse(); // shipQueue = new
+		 * PriorityQueue<Ship>((sa, sb) -> sa.GetDistance() // -
+		 * sb.GetDistance()); }/*
+		 */
 		// return 0;
-		
+
 	}
 
 	private static void InitializeSectorList()
 	{
-		SECTOR_LIST = new ArrayList<>();
-		Sector sect1 = new Sector("Argon Prime", 0, 0);
-		Sector sect2 = new Sector("Power Circle", 0, 1);
-		Sector sect3 = new Sector("Ore Belt", 1, 0);
-
-		SECTOR_LIST.add(sect1);
-		SECTOR_LIST.add(sect2);
-		SECTOR_LIST.add(sect3);
-
-		LinkSectors(sect1, sect2);
-		LinkSectors(sect1, sect3);
-
-		Factory f;
-		f = new Factory(0, 'A', 'L');
-		sect1.AddFactory(f);
-		f = new Factory(1, 'A', 'M');
-		sect1.AddFactory(f);
-		f = new Factory(3, 'A', 'S');
-		sect1.AddFactory(f);
+		/*
+		 * SECTOR_LIST = new ArrayList<>(); Sector sect1 = new
+		 * Sector("Argon Prime", 0, 0); Sector sect2 = new
+		 * Sector("Power Circle", 0, 1); Sector sect3 = new Sector("Ore Belt",
+		 * 1, 0);
+		 * 
+		 * SECTOR_LIST.add(sect1); SECTOR_LIST.add(sect2);
+		 * SECTOR_LIST.add(sect3);
+		 * 
+		 * LinkSectors(sect1, sect2); LinkSectors(sect1, sect3);
+		 * 
+		 * Factory f; f = new Factory(0, 'A', 'L'); sect1.AddFactory(f); f = new
+		 * Factory(1, 'A', 'M'); sect1.AddFactory(f); f = new Factory(3, 'A',
+		 * 'S'); sect1.AddFactory(f);/*
+		 */
+		try
+		{
+			SECTOR_LIST = new Hashtable<>();
+			
+			String name;
+			int x, y, id, factid, dist;
+			char race, size;
+			ResultSet rs = DatabaseShell.GetSectors();
+			// sector (id integer primary key, name text, x integer, y integer)
+			// sectorlink (sect1id integer, sect2id integer, distance integer
+			// sectorcontent (sectid integer, factid integer, race text, size
+			// text, distance integer, yield real
+			while (rs.next())
+			{
+				id = rs.getInt(1);
+				name = rs.getString(2);
+				x = rs.getInt(3);
+				y = rs.getInt(4);
+				Sector sect = new Sector(name, x, y);
+				
+				ResultSet contents = DatabaseShell.GetSectorContents(id);
+				
+				while (contents.next())
+				{
+					factid = contents.getInt(2);
+					race = contents.getString(3).charAt(0);
+					size = contents.getString(4).charAt(0);
+					dist = contents.getInt(5);
+					Factory fact = new Factory(factid, race, size, dist);
+					
+					sect.AddFactory(fact);
+				}
+				
+				SECTOR_LIST.put(id, sect);
+			}
+			
+			rs = DatabaseShell.GetSectorLinks();
+			
+			while (rs.next())
+			{
+				LinkSectors(SECTOR_LIST.get(rs.getInt(1)), SECTOR_LIST.get(rs.getInt(2)));
+			}
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -71,8 +112,9 @@ public class Controller
 	{
 		try
 		{
+			MASTER_RESOURCE_LIST = new Hashtable<>();
 			ResultSet rs = DatabaseShell.GetWares();
-			
+
 			while (rs.next())
 			{
 				MASTER_RESOURCE_LIST.put(rs.getInt(1), rs.getString(2));
@@ -83,21 +125,21 @@ public class Controller
 			String name;
 			char size;
 			Factory f;
-			
+
 			MASTER_FACTORY_LIST = new Hashtable<>();
 			while (rs.next())
 			{
-				id = rs.getInt(0);
-				name = rs.getString(1);
-				size = rs.getString(0).charAt(0);
-				
+				id = rs.getInt(1);
+				name = rs.getString(2);
+				size = rs.getString(3).charAt(0);
+
 				ResultSet wares = DatabaseShell.GetFactoryIO(id);
 
 				while (wares.next())
 				{
-					io.add(new double[] {wares.getInt(2), wares.getDouble(2)});
+					io.add(new double[] { wares.getInt(2), wares.getDouble(3) });
 				}
-				
+
 				f = new Factory(io, id, size, name);
 				MASTER_FACTORY_LIST.put(id, f);
 			}
@@ -121,9 +163,10 @@ public class Controller
 	 */
 	public static void Pulse()
 	{
-		for (Sector sec : SECTOR_LIST)
+		TIME = 0;
+		while (TIME < MAX_TIME)
 		{
-			//sec.Pulse();
+
 		}
 	}
 
@@ -165,17 +208,16 @@ public class Controller
 			if (supply.containsKey(-key))
 			{
 				sb.append(String.format(ResourceRound(value) + " %1$-15s"
-						+ ResourceRound(Math.abs(supply.get(-key))) + " %1$-15s\n",
-						MASTER_RESOURCE_LIST.get(key)));
+						+ ResourceRound(Math.abs(supply.get(-key)))
+						+ " %1$-15s\n", MASTER_RESOURCE_LIST.get(key)));
 			} else if (value < 0)
 			{
-				sb.append(String.format(
-						"\t    " + ResourceRound(value)
-								+ " %1$-15s\n", MASTER_RESOURCE_LIST.get(key)));
+				sb.append(String.format("\t    " + ResourceRound(value)
+						+ " %1$-15s\n", MASTER_RESOURCE_LIST.get(key)));
 			} else
 			{
-				sb.append(String.format(ResourceRound(value)
-						+ " %1$-15s\n", MASTER_RESOURCE_LIST.get(key)));
+				sb.append(String.format(ResourceRound(value) + " %1$-15s\n",
+						MASTER_RESOURCE_LIST.get(key)));
 			}
 		}
 
@@ -189,6 +231,7 @@ public class Controller
 	}
 
 	// Constants
-	public static int MAX_TRAVEL_DISTANCE = 2;
-	public static int DEMAND_DISTANCE = 1;
+	public static final int MAX_TRAVEL_DISTANCE = 2;
+	public static final int DEMAND_DISTANCE = 1;
+	private static final long MAX_TIME = 1000000;
 }

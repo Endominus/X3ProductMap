@@ -26,30 +26,18 @@ public class DatabaseShell
 			statement = connection.createStatement();
 			statement.setQueryTimeout(30); // set timeout to 30 sec.
 
-			//RefreshTables();
+			RefreshTables();/**/
 
 			GenerateWares();
 			GenerateFactories();
 			GenerateSectors();
-			
-			//statement.executeUpdate("insert into ware values(0, 'Energy Cells', 14, 1)");
-			//statement.executeUpdate("insert into ware values(1, 'Energy Cellsa', 14, 0)");
-			
-			/*ResultSet rs = statement.executeQuery("select * from sector");
-			while (rs.next())
-			{
-				// read the result set
-				System.out.println("name = " + rs.getString("name"));
-				System.out.println("id = " + rs.getInt("id"));
-				System.out.println("coords = " + rs.getInt("x") + "," + rs.getInt("y"));
-			}/**/
-			
+				
 		} catch (SQLException | IOException e)
 		{
 			// if the error message is "out of memory",
 			// it probably means no database file is found
 			System.err.println(e.getMessage());
-		} finally
+		} /*finally
 		{
 			try
 			{
@@ -60,12 +48,12 @@ public class DatabaseShell
 				// connection close failed.
 				System.err.println(e);
 			}
-		}
+		}*/
 	}
 
 	private static void GenerateSectors() throws SQLException, IOException
 	{
-		String name, line, x, y, id, factid, race, size, yield;
+		String name, line, x, y, id, factid, race, size, distance, yield;
 		FileReader fin = new FileReader("res/X3_sectors.txt");
 		Scanner scanner = new Scanner(fin);
 		line = scanner.nextLine();
@@ -90,6 +78,7 @@ public class DatabaseShell
 				factid = line.split(":")[1];
 				race = scanner.nextLine().split(":")[1];
 				size = scanner.nextLine().split(":")[1];
+				distance = scanner.nextLine().split(":")[1];
 				
 				line = scanner.nextLine();
 				if (line.split(":")[0].equals("\tyield"))
@@ -98,7 +87,7 @@ public class DatabaseShell
 					line = scanner.nextLine();
 				}
 				
-				statement.executeUpdate(String.format("insert into sectorcontent values(%1s, %2s, '%3s', '%4s', %5s)", id, factid, race, size, yield));
+				statement.executeUpdate(String.format("insert into sectorcontent values(%1s, %2s, '%3s', '%4s', %5s, %6s)", id, factid, race, size, distance, yield));
 				//System.out.println(line);
 			}
 			
@@ -216,7 +205,7 @@ public class DatabaseShell
 		statement
 				.executeUpdate("create table sectorlink (sect1id integer, sect2id integer, distance integer, foreign key (sect1id) references sector(id), foreign key (sect2id) references sector(id))");
 		statement
-				.executeUpdate("create table sectorcontent (sectid integer, factid integer, race text, size text, yield real, foreign key (sectid) references sector(id), foreign key (factid) references factory(id))");
+				.executeUpdate("create table sectorcontent (sectid integer, factid integer, race text, size text, distance integer, yield real, foreign key (sectid) references sector(id), foreign key (factid) references factory(id))");
 	}
 
 	public static ResultSet GetWares()
@@ -249,7 +238,9 @@ public class DatabaseShell
 	{
 		try
 		{
-			return statement.executeQuery("select * from factoryio where factoryid = " + Integer.toString(id));
+			Statement nestedStatement = connection.createStatement();
+			nestedStatement.setQueryTimeout(30);
+			return nestedStatement.executeQuery("select * from factoryio where factoryid = " + Integer.toString(id));
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -275,10 +266,11 @@ public class DatabaseShell
 	{
 		try
 		{
-			return statement.executeQuery("select * from sectorcontent where sectid = " + Integer.toString(id));
+			Statement nestedStatement = connection.createStatement();
+			nestedStatement.setQueryTimeout(30);
+			return nestedStatement.executeQuery("select * from sectorcontent where sectid = " + Integer.toString(id));
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

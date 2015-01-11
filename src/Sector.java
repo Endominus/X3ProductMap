@@ -14,7 +14,7 @@ public class Sector
 	private HashMap<Integer, Double> resourceDemand = new HashMap<>();
 	private HashMap<Integer, Double> resourceSupply = new HashMap<>();
 	private HashMap<Integer, Double> resourceStockpile = new HashMap<>();
-	private int distance;
+	private int distance, size = 200;
 	private int[] coords;
 
 	public Sector(String n, int x, int y)

@@ -14,7 +14,7 @@ public class SectorTest
 	{
 		Controller.main(null);
 		this.sect = new Sector("A", 1, 1);
-		Factory fact = new Factory(0, 'A', 'M');
+		Factory fact = new Factory(0, 'A', 'M', 150);
 		this.sect.AddFactory(fact);
 	}
 
@@ -27,7 +27,7 @@ public class SectorTest
 	public void testNetFlow()
 	{
 		assertTrue(this.sect.NetFlow(0) == 100);
-		sect.AddFactory(new Factory(1, 'A', 'M'));
+		sect.AddFactory(new Factory(1, 'A', 'M', 150));
 		assertTrue(this.sect.NetFlow(0) == 80);
 	}
 
@@ -35,8 +35,8 @@ public class SectorTest
 	public void testDemandFactor()
 	{
 		assertTrue(sect.DemandFactor(0) == 0);
-		sect.AddFactory(new Factory(1, 'A', 'X'));
-		sect.AddFactory(new Factory(1, 'A', 'X'));
+		sect.AddFactory(new Factory(1, 'A', 'X', 150));
+		sect.AddFactory(new Factory(1, 'A', 'X', 150));
 		assertTrue(sect.DemandFactor(0) == 0.5);
 		assertTrue(sect.DemandFactor(2) == 0);
 	}
@@ -45,9 +45,9 @@ public class SectorTest
 	public void testDemand()
 	{
 		assertTrue(sect.Demand().size() == 0);
-		sect.AddFactory(new Factory(3, 'A', 'S'));
+		sect.AddFactory(new Factory(3, 'A', 'S', 150));
 		assertTrue(sect.Demand().size() == 3);
-		sect.AddFactory(new Factory(1, 'A', 'M'));
+		sect.AddFactory(new Factory(1, 'A', 'M', 150));
 		assertTrue(sect.Demand().get(0) == -40);
 		assertTrue(sect.Demand().get(1) == -50);
 		assertTrue(sect.Demand().get(2) == -50);
