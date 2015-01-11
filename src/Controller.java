@@ -123,7 +123,7 @@ public class Controller
 	{
 		for (Sector sec : SECTOR_LIST)
 		{
-			sec.Pulse();
+			//sec.Pulse();
 		}
 	}
 
@@ -136,15 +136,16 @@ public class Controller
 	{
 		StringBuilder sb = new StringBuilder();
 		Sector sect = SECTOR_LIST.get(sectorID);
-		int key, value;
+		int key;
+		double value;
 
 		sb.append("Name: " + sect.getName() + "\n\n");
 		sb.append("Produces\t    Consumes\n");
-		HashMap<Integer, Integer> demand = sect.getResourceDemand();
-		HashMap<Integer, Integer> supply = sect.getResourceSupply();
+		HashMap<Integer, Double> demand = sect.getResourceDemand();
+		HashMap<Integer, Double> supply = sect.getResourceSupply();
 
 		// Clever, but not useful right now
-		for (Entry<Integer, Integer> res : demand.entrySet())
+		for (Entry<Integer, Double> res : demand.entrySet())
 		{
 			key = res.getKey();
 			value = res.getValue();
@@ -155,7 +156,7 @@ public class Controller
 			});
 		}/**/
 
-		for (Entry<Integer, Integer> res : supply.entrySet())
+		for (Entry<Integer, Double> res : supply.entrySet())
 		{
 			key = res.getKey();
 			value = res.getValue();
@@ -181,10 +182,10 @@ public class Controller
 		return sb.toString();
 	}
 
-	private static String ResourceRound(int value)
+	private static String ResourceRound(double value)
 	{
 		// TODO Auto-generated method stub
-		return Integer.toString(value);
+		return Double.toString(value);
 	}
 
 	// Constants

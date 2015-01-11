@@ -10,10 +10,10 @@ public class Sector
 	private String name;
 	private ArrayList<Factory> factoryList = new ArrayList<>();
 	private ArrayList<Sector> sectorList = new ArrayList<>();
-	private ArrayList<int[]> resourcesInTransit = new ArrayList<>();
-	private HashMap<Integer, Integer> resourceDemand = new HashMap<>();
-	private HashMap<Integer, Integer> resourceSupply = new HashMap<>();
-	private HashMap<Integer, Integer> resourceStockpile = new HashMap<>();
+	private ArrayList<Double[]> resourcesInTransit = new ArrayList<>();
+	private HashMap<Integer, Double> resourceDemand = new HashMap<>();
+	private HashMap<Integer, Double> resourceSupply = new HashMap<>();
+	private HashMap<Integer, Double> resourceStockpile = new HashMap<>();
 	private int distance;
 	private int[] coords;
 
@@ -23,10 +23,10 @@ public class Sector
 		this.coords = new int[] {x, y};
 	}
 
-	public int NetFlow(int id)
+	public double NetFlow(int id)
 	{
-		int demand = 0;
-		int supply = 0;
+		double demand = 0;
+		double supply = 0;
 
 		if (this.resourceDemand.containsKey(id))
 		{
@@ -52,11 +52,12 @@ public class Sector
 
 	// The current resources demanded by this sector (resourceDemand -
 	// resourceStockpile)
-	public HashMap<Integer, Integer> Demand()
+	public HashMap<Integer, Double> Demand()
 	{
-		HashMap<Integer, Integer> toReturn = new HashMap<>();
-		int key, value;
-		for (Entry<Integer, Integer> entry : this.resourceDemand.entrySet())
+		HashMap<Integer, Double> toReturn = new HashMap<>();
+		int key;
+		double value;
+		for (Entry<Integer, Double> entry : this.resourceDemand.entrySet())
 		{
 			key = entry.getKey();
 			value = entry.getValue() + this.resourceStockpile.get(key);
@@ -68,7 +69,8 @@ public class Sector
 
 	public String toString()
 	{
-		int key, value;
+		int key;
+		double value;
 		String s;
 		StringBuilder sb = new StringBuilder();
 
@@ -87,7 +89,7 @@ public class Sector
 			sb.append(fact.toString());
 		}
 		sb.append("Aggregate Resource Supply:\n");
-		for (Entry<Integer, Integer> entry : this.resourceSupply.entrySet())
+		for (Entry<Integer, Double> entry : this.resourceSupply.entrySet())
 		{
 			key = entry.getKey();
 			value = entry.getValue();
@@ -101,7 +103,7 @@ public class Sector
 					Controller.MASTER_RESOURCE_LIST.get(key), value));
 		}
 		sb.append("Aggregate Resource Demand:\n");
-		for (Entry<Integer, Integer> entry : this.resourceDemand.entrySet())
+		for (Entry<Integer, Double> entry : this.resourceDemand.entrySet())
 		{
 			key = entry.getKey();
 			value = entry.getValue();
@@ -126,22 +128,22 @@ public class Sector
 	public void AddFactory(Factory fact)
 	{
 		this.factoryList.add(fact);
-		int[][] res = fact.getResources();
+		double[][] res = fact.getResources();
 		this.resourceSupply
-				.put(res[0][0],
+				.put((int) res[0][0],
 						res[0][1]
 								+ (this.resourceSupply.containsKey(res[0][0]) ? this.resourceSupply
 										.get(res[0][0]) : 0));
 		for (int i = 1; i < res.length; i++)
 		{
 			this.resourceDemand
-					.put(res[i][0],
+					.put((int) res[i][0],
 							res[i][1]
 									+ (this.resourceDemand
 											.containsKey(res[i][0]) ? this.resourceDemand
 											.get(res[i][0]) : 0));
 			if (!this.resourceStockpile.containsKey(res[i][0]))
-				this.resourceStockpile.put(res[i][0], 0);
+				this.resourceStockpile.put((int) res[i][0], 0.0);
 		}
 	}
 
@@ -161,27 +163,27 @@ public class Sector
 		return this.coords;
 	}
 
-	public HashMap<Integer, Integer> getResourceSupply()
+	public HashMap<Integer, Double> getResourceSupply()
 	{
 		return resourceSupply;
 	}
 
-	public void SendResource(int[] ship)
+	public void SendResource(Double[] ship)
 	{
 		this.resourcesInTransit.add(ship);
 	}
 
-	public void Pulse()
+	/*public void Pulse()
 	{
 		DistributeResources();
 		ProduceGoods();
 		DisseminateProducts();
 		ReceiveShipments();
-	}
+	}*/
 
-	public void ReceiveShipments()
+	/*public void ReceiveShipments()
 	{
-		int[] res;
+		double[] res;
 		for (int i = 0; i < this.resourcesInTransit.size(); i++)
 		{
 			if (this.resourcesInTransit.get(i)[0] == 0)
@@ -202,8 +204,9 @@ public class Sector
 		Queue<Sector> q = new LinkedList<>();
 		ArrayList<Sector> traversed = new ArrayList<>();
 		Sector s;
-		HashMap<Integer, Integer> localDemand = new HashMap<>();
-		int transferAmount, key, value;
+		HashMap<Integer, Double> localDemand = new HashMap<>();
+		int key;
+		double value, transferAmount;
 		boolean quit = false;
 
 		q.addAll(this.sectorList);
@@ -214,7 +217,7 @@ public class Sector
 			s = q.poll();
 			localDemand = s.Demand();
 
-			for (Entry<Integer, Integer> res : this.resourceSupply
+			for (Entry<Integer, Double> res : this.resourceSupply
 					.entrySet())
 			{
 				key = res.getKey();
@@ -222,7 +225,7 @@ public class Sector
 				if (localDemand.containsKey(key))
 				{
 					transferAmount = Math.min(localDemand.get(key), value);
-					s.SendShipment(new int[] { s.getDistance(), key, transferAmount } );
+					s.SendShipment(new double[] { s.getDistance(), key, transferAmount } );
 					res.setValue(value - transferAmount);
 				}
 			}
@@ -258,9 +261,9 @@ public class Sector
 		}
 	}
 
-	private void SendShipment(int[] is)
+	private void SendShipment(double[] ds)
 	{
-		this.resourcesInTransit.add(is);
+		this.resourcesInTransit.add(ds);
 		
 	}
 
@@ -291,18 +294,18 @@ public class Sector
 
 			res.setValue(0);
 		}
-	}
+	}*/
 
 	private void ProduceGoods()
 	{
-		int[][] production;
+		double[][] production;
 
 		for (Factory f : this.factoryList)
 		{
 			production = f.Produce();
-			for (int[] res : production)
+			for (double[] res : production)
 			{
-				this.resourceStockpile.put(res[0],
+				this.resourceStockpile.put((int) res[0],
 						this.resourceStockpile.get(res[0]) + res[1]);
 			}
 		}
@@ -328,17 +331,17 @@ public class Sector
 		return sectorList;
 	}
 
-	public ArrayList<int[]> getResourcesInTransit()
+	/*public ArrayList<int[]> getResourcesInTransit()
 	{
 		return resourcesInTransit;
-	}
+	}*/
 
-	public HashMap<Integer, Integer> getResourceStockpile()
+	public HashMap<Integer, Double> getResourceStockpile()
 	{
 		return resourceStockpile;
 	}
 
-	public HashMap<Integer, Integer> getResourceDemand()
+	public HashMap<Integer, Double> getResourceDemand()
 	{
 		return this.resourceDemand;
 	}

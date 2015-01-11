@@ -53,7 +53,7 @@ public class SectorTest
 		assertTrue(sect.Demand().get(2) == -50);
 	}
 
-	@Test
+	/*@Test
 	public void testSendResource()
 	{
 		sect.AddFactory(new Factory(3, 'A', 'S'));
@@ -67,7 +67,7 @@ public class SectorTest
 		sect.ReceiveShipments();
 		assertTrue(sect.getResourceStockpile().get(1) == 50);
 		assertTrue(sect.getResourcesInTransit().size() == 1);
-	}
+	}*/
 
 	@Test
 	public void testPulse()
