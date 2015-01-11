@@ -219,4 +219,96 @@ public class DatabaseShell
 				.executeUpdate("create table sectorcontent (sectid integer, factid integer, race text, size text, yield real, foreign key (sectid) references sector(id), foreign key (factid) references factory(id))");
 	}
 
+	public ResultSet GetWares()
+	{
+		try
+		{
+			return statement.executeQuery("select * from ware");
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ResultSet GetFactories()
+	{
+		try
+		{
+			return statement.executeQuery("select * from factory");
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ResultSet GetFactoryIO(int id)
+	{
+		try
+		{
+			return statement.executeQuery("select * from factoryio where factoryid = " + Integer.toString(id));
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ResultSet GetSectors()
+	{
+		try
+		{
+			return statement.executeQuery("select * from sector");
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ResultSet GetSectorContents(int id)
+	{
+		try
+		{
+			return statement.executeQuery("select * from sectorcontent where sectid = " + Integer.toString(id));
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ResultSet GetSectorLinks()
+	{
+		try
+		{
+			return statement.executeQuery("select * from sectorlink");
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public boolean IsWareProduct(int id)
+	{
+
+		try
+		{
+			return statement.executeQuery("select product from ware where id = " + Integer.toString(id)).getBoolean(0);
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 }
