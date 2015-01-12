@@ -184,7 +184,7 @@ public class Factory
 		for (int i = 0; i < this.resDemanded.length; i++)
 		{
 			s = String
-					.format("\t\t%s: %d\n", Controller.MASTER_RESOURCE_LIST
+					.format("\t\t%s: %f\n", Controller.MASTER_RESOURCE_LIST
 							.get(this.resDemanded[i][0]),
 							this.resDemanded[i][1]);
 			sb.append(s);

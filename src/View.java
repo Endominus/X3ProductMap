@@ -149,8 +149,6 @@ public class View extends JFrame implements ActionListener
 			this.selectedButton.ToggleSelected();
 			String stats = Controller.GetStats(this.selectedButton.GetSectorID());
 			this.statsText.setText(stats);
-			//JTextArea text;
-			
 		}	
 	}
 }

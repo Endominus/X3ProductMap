@@ -31,7 +31,15 @@ public class DatabaseShell
 			GenerateWares();
 			GenerateFactories();
 			GenerateSectors();
-				
+			
+//			ResultSet rs = statement.executeQuery("select * from factoryio where factoryid = 0");
+//			
+//			while (rs.next())
+//			{
+//				System.out.println("id: " + rs.getInt(2));
+//				System.out.println("amount: " + rs.getDouble(3));
+//			}
+			
 		} catch (SQLException | IOException e)
 		{
 			// if the error message is "out of memory",

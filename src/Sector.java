@@ -14,12 +14,13 @@ public class Sector
 	private HashMap<Integer, Double> resourceDemand = new HashMap<>();
 	private HashMap<Integer, Double> resourceSupply = new HashMap<>();
 	private HashMap<Integer, Double> resourceStockpile = new HashMap<>();
-	private int distance, size = 200;
+	private int distance, id, size = 200;
 	private int[] coords;
 
-	public Sector(String n, int x, int y)
+	public Sector(String n, int id, int x, int y)
 	{
 		this.name = n;
+		this.id = id;
 		this.coords = new int[] {x, y};
 	}
 
@@ -99,7 +100,7 @@ public class Sector
 				value += this.resourceDemand.get(key);
 			}
 
-			sb.append(String.format("\t%s: %d\n",
+			sb.append(String.format("\t%s: %f\n",
 					Controller.MASTER_RESOURCE_LIST.get(key), value));
 		}
 		sb.append("Aggregate Resource Demand:\n");
@@ -118,7 +119,7 @@ public class Sector
 				}
 			}
 
-			sb.append(String.format("\t%s: %d\n",
+			sb.append(String.format("\t%s: %f\n",
 					Controller.MASTER_RESOURCE_LIST.get(key), value));
 		}
 
@@ -344,5 +345,10 @@ public class Sector
 	public HashMap<Integer, Double> getResourceDemand()
 	{
 		return this.resourceDemand;
+	}
+
+	public int getId()
+	{
+		return this.id;
 	}
 }

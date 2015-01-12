@@ -28,9 +28,12 @@ public class Controller
 		View v = new View();
 		for (Sector sect : SECTOR_LIST.values())
 		{
-			v.AddSector(sect.getName(), 0, sect.getCoords()[0],
+			v.AddSector(sect.getName(), sect.getId(), sect.getCoords()[0],
 					sect.getCoords()[1]);
 		}
+		
+		//System.out.print(SECTOR_LIST.get(0).toString());
+		//System.out.print(SECTOR_LIST.get(1).toString());
 
 		/*
 		 * while (TIME < 1000000) { Pulse(); // shipQueue = new
@@ -43,21 +46,6 @@ public class Controller
 
 	private static void InitializeSectorList()
 	{
-		/*
-		 * SECTOR_LIST = new ArrayList<>(); Sector sect1 = new
-		 * Sector("Argon Prime", 0, 0); Sector sect2 = new
-		 * Sector("Power Circle", 0, 1); Sector sect3 = new Sector("Ore Belt",
-		 * 1, 0);
-		 * 
-		 * SECTOR_LIST.add(sect1); SECTOR_LIST.add(sect2);
-		 * SECTOR_LIST.add(sect3);
-		 * 
-		 * LinkSectors(sect1, sect2); LinkSectors(sect1, sect3);
-		 * 
-		 * Factory f; f = new Factory(0, 'A', 'L'); sect1.AddFactory(f); f = new
-		 * Factory(1, 'A', 'M'); sect1.AddFactory(f); f = new Factory(3, 'A',
-		 * 'S'); sect1.AddFactory(f);/*
-		 */
 		try
 		{
 			SECTOR_LIST = new Hashtable<>();
@@ -76,7 +64,7 @@ public class Controller
 				name = rs.getString(2);
 				x = rs.getInt(3);
 				y = rs.getInt(4);
-				Sector sect = new Sector(name, x, y);
+				Sector sect = new Sector(name, id, x, y);
 				
 				ResultSet contents = DatabaseShell.GetSectorContents(id);
 				
@@ -129,6 +117,7 @@ public class Controller
 			MASTER_FACTORY_LIST = new Hashtable<>();
 			while (rs.next())
 			{
+				io.clear();
 				id = rs.getInt(1);
 				name = rs.getString(2);
 				size = rs.getString(3).charAt(0);
