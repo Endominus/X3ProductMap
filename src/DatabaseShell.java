@@ -61,7 +61,7 @@ public class DatabaseShell
 
 	private static void GenerateSectors() throws SQLException, IOException
 	{
-		String name, line, x, y, id, factid, race, size, distance, yield;
+		String name, line, x, y, id, factid, race, sSize, size, distance, yield;
 		FileReader fin = new FileReader("res/X3_sectors.txt");
 		Scanner scanner = new Scanner(fin);
 		line = scanner.nextLine();
@@ -71,11 +71,12 @@ public class DatabaseShell
 		{
 			id = line.split(":")[1];
 			name = scanner.nextLine().split(":")[1];
+			sSize = scanner.nextLine().split(":")[1];
 			line = scanner.nextLine().split(":")[1];
 			x = line.split(",")[0];
 			y = line.split(",")[1];
 			
-			statement.executeUpdate(String.format("insert into sector values(%1s, '%2s', %3s, %4s)", id, name, x, y));
+			statement.executeUpdate(String.format("insert into sector values(%1s, '%2s', %3s, %4s, %5s)", id, name, sSize, x, y));
 			
 			scanner.nextLine();
 			line = scanner.nextLine();
@@ -207,7 +208,7 @@ public class DatabaseShell
 		statement
 				.executeUpdate("create table factory (id integer primary key, name text, size text)");
 		statement
-				.executeUpdate("create table sector (id integer primary key, name text, x integer, y integer)");
+				.executeUpdate("create table sector (id integer primary key, name text, size integer, x integer, y integer)");
 		statement
 				.executeUpdate("create table factoryio (factoryid integer, wareid integer, amount real, foreign key (factoryid) references factory(id), foreign key (wareid) references ware(id))");
 		statement

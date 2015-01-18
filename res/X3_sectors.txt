@@ -1,16 +1,17 @@
 id:0
 name:SectorA
+size:20000
 coords:0,0
 stations:
 	-station_id:57
 	race:A
 	size:M
-	distance:100
+	distance:10000
 	yield:100
 	-station_id:41
 	race:A
-	size:M
-	distance:100
+	size:L
+	distance:10000
 	yield:25
 linked_sectors:
 	-sector_id:1
@@ -18,48 +19,51 @@ linked_sectors:
 ---
 id:1
 name:SectorB
+size:20000
 coords:1,0
 stations:
 	-station_id:21
 	race:A
 	size:L
-	distance:100
+	distance:10000
 	-station_id:40
 	race:A
 	size:S
-	distance:100
+	distance:10000
 linked_sectors:
 	-sector_id:0
 	-sector_id:3
 ---
 id:2
 name:SectorC
+size:20000
 coords:0,1
 stations:
 	-station_id:25
 	race:A
 	size:M
-	distance:100
+	distance:10000
 	-station_id:40
 	race:A
 	size:S
-	distance:100
+	distance:10000
 linked_sectors:
 	-sector_id:0
 	-sector_id:3
 ---
 id:3
 name:SectorD
+size:20000
 coords:1,1
 stations:
 	-station_id:20
 	race:A
 	size:L
-	distance:100
+	distance:10000
 	-station_id:54
 	race:A
 	size:M
-	distance:100
+	distance:10000
 	yield:25
 linked_sectors:
 	-sector_id:1

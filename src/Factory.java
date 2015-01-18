@@ -6,10 +6,11 @@ public class Factory
 
 	private double[][] resDemanded;
 	private double[][] resStockpiled;
-	private int template, distance;
+	private int template;
 	private char size;
 	private char race;
 	private String name;
+	private ArrayList<Ship> inboundShips = new ArrayList<>();
 
 	public Factory(double[][] res, int t, char s, String n)
 	{
@@ -19,7 +20,7 @@ public class Factory
 		this.name = n;
 	}
 
-	public Factory(int defaultType, char race, char size, int d)
+	public Factory(int defaultType, char race, char size)
 	{
 		Factory factoryTemplate = Controller.MASTER_FACTORY_LIST
 				.get(defaultType);
@@ -36,7 +37,6 @@ public class Factory
 		this.race = race;
 		this.size = size;
 		this.template = defaultType;
-		this.distance = d;
 
 		CorrectRacialResources();
 
@@ -71,23 +71,23 @@ public class Factory
 				{
 				case 'A':
 					this.resDemanded[i][0] = 47;
-					this.resDemanded[i][0] = 600;
+					this.resDemanded[i][1] = -600;
 					break;
 				case 'B':
 					this.resDemanded[i][0] = 23;
-					this.resDemanded[i][0] = 150;
+					this.resDemanded[i][1] = -150;
 					break;
 				case 'P':
 					this.resDemanded[i][0] = 62;
-					this.resDemanded[i][0] = 120;
+					this.resDemanded[i][1] = -120;
 					break;
 				case 'S':
 					this.resDemanded[i][0] = 57;
-					this.resDemanded[i][0] = 90;
+					this.resDemanded[i][1] = -90;
 					break;
 				case 'T':
 					this.resDemanded[i][0] = 53;
-					this.resDemanded[i][0] = 600;
+					this.resDemanded[i][1] = -600;
 					break;
 				}
 				break;
@@ -191,8 +191,23 @@ public class Factory
 		}
 		return sb.toString();
 	}
+	
+	public void RequestDocking(Ship s)
+	{
+		this.inboundShips.add(s);
+	}
+	
+	public void Takeoff(Ship s)
+	{
+		this.inboundShips.remove(s);
+	}
 
 	public double[][] getResources()
+	{
+		return resDemanded;
+	}
+	
+	public double[][] getStockpile()
 	{
 		return resDemanded;
 	}
@@ -217,8 +232,16 @@ public class Factory
 		return name;
 	}
 	
-	public int getDistance()
+	public void Transfer(int wareLocation, int wareAmount)
 	{
-		return distance;
+		this.resStockpiled[wareLocation][1] += wareAmount;		
+	}
+
+	public void NotifyDockingQueue(int ware)
+	{
+		for (Ship s : this.inboundShips)
+		{
+			s.InterruptJourney(ware);
+		}
 	}
 }

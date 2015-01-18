@@ -51,7 +51,7 @@ public class Controller
 			SECTOR_LIST = new Hashtable<>();
 			
 			String name;
-			int x, y, id, factid, dist;
+			int x, y, id, factid, dist, sSize;
 			char race, size;
 			ResultSet rs = DatabaseShell.GetSectors();
 			// sector (id integer primary key, name text, x integer, y integer)
@@ -62,19 +62,19 @@ public class Controller
 			{
 				id = rs.getInt(1);
 				name = rs.getString(2);
-				x = rs.getInt(3);
-				y = rs.getInt(4);
-				Sector sect = new Sector(name, id, x, y);
+				sSize = rs.getInt(3);
+				x = rs.getInt(4);
+				y = rs.getInt(5);
+				Sector sect = new Sector(name, id, sSize, x, y);
 				
 				ResultSet contents = DatabaseShell.GetSectorContents(id);
 				
 				while (contents.next())
 				{
 					factid = contents.getInt(2);
-					race = contents.getString(3).charAt(0);
-					size = contents.getString(4).charAt(0);
-					dist = contents.getInt(5);
-					Factory fact = new Factory(factid, race, size, dist);
+					race = contents.getString(3).trim().charAt(0);
+					size = contents.getString(4).trim().charAt(0);
+					Factory fact = new Factory(factid, race, size);
 					
 					sect.AddFactory(fact);
 				}
@@ -120,7 +120,7 @@ public class Controller
 				io.clear();
 				id = rs.getInt(1);
 				name = rs.getString(2);
-				size = rs.getString(3).charAt(0);
+				size = rs.getString(3).trim().charAt(0);
 
 				ResultSet wares = DatabaseShell.GetFactoryIO(id);
 
@@ -223,4 +223,11 @@ public class Controller
 	public static final int MAX_TRAVEL_DISTANCE = 2;
 	public static final int DEMAND_DISTANCE = 1;
 	private static final long MAX_TIME = 1000000;
+	public static final int TICK_TIME = 1000;
+
+	public static void AddShipEvent(Ship ship)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

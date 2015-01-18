@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
-import java.util.Queue;
 
 public class Sector
 {
@@ -14,13 +12,14 @@ public class Sector
 	private HashMap<Integer, Double> resourceDemand = new HashMap<>();
 	private HashMap<Integer, Double> resourceSupply = new HashMap<>();
 	private HashMap<Integer, Double> resourceStockpile = new HashMap<>();
-	private int distance, id, size = 200;
+	private int distance, id, size;
 	private int[] coords;
 
-	public Sector(String n, int id, int x, int y)
+	public Sector(String n, int id, int size, int x, int y)
 	{
 		this.name = n;
 		this.id = id;
+		this.size = size;
 		this.coords = new int[] {x, y};
 	}
 
