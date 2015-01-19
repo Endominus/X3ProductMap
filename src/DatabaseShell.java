@@ -15,7 +15,7 @@ public class DatabaseShell
 	private static Connection connection = null;
 	private static Statement statement = null;
 	
-	public static void InitializeDatabase() throws ClassNotFoundException
+	public static void InitializeDatabase(String sectorSource) throws ClassNotFoundException
 	{
 		
 		Class.forName("org.sqlite.JDBC");
@@ -30,7 +30,7 @@ public class DatabaseShell
 
 			GenerateWares();
 			GenerateFactories();
-			GenerateSectors();
+			GenerateSectors(sectorSource);
 			
 //			ResultSet rs = statement.executeQuery("select * from factoryio where factoryid = 0");
 //			
@@ -59,10 +59,12 @@ public class DatabaseShell
 		}*/
 	}
 
-	private static void GenerateSectors() throws SQLException, IOException
+	private static void GenerateSectors(String source) throws SQLException, IOException
 	{
+		if (source == null)
+			source = "res/X3_sectors.txt";
 		String name, line, x, y, id, factid, race, sSize, size, distance, yield;
-		FileReader fin = new FileReader("res/X3_sectors.txt");
+		FileReader fin = new FileReader(source);
 		Scanner scanner = new Scanner(fin);
 		line = scanner.nextLine();
 		

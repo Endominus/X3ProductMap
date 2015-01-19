@@ -22,6 +22,14 @@ public class Sector
 		this.size = size;
 		this.coords = new int[] {x, y};
 	}
+	
+	public void ProduceGoods(int interval)
+	{
+		for (Factory f : this.factoryList)
+		{
+			f.Produce(interval);
+		}
+	}
 
 	public double NetFlow(int id)
 	{
@@ -39,32 +47,24 @@ public class Sector
 		return supply + demand;
 	}
 
-	//TODO Remove? Doesn't seem useful any more.
 	public double DemandFactor(int id)
 	{
 		if (!this.resourceDemand.containsKey(id))
 			return 0;
-		double demand = -1.0 * this.resourceDemand.get(id);
-		double supply = 1.0 * this.resourceSupply.get(id);
+		double demand = -8 * this.resourceDemand.get(id);
+		double stock = this.resourceStockpile.get(id);
 		
-		return Math.max(0, (demand - supply)/demand);
+		return Math.max(0, (demand - stock)/demand);
 	}
-
-	// The current resources demanded by this sector (resourceDemand -
-	// resourceStockpile)
-	public HashMap<Integer, Double> Demand()
+	
+	public double SupplyFactor(int id)
 	{
-		HashMap<Integer, Double> toReturn = new HashMap<>();
-		int key;
-		double value;
-		for (Entry<Integer, Double> entry : this.resourceDemand.entrySet())
-		{
-			key = entry.getKey();
-			value = entry.getValue() + this.resourceStockpile.get(key);
-			if (value < 0)
-				toReturn.put(key, value);
-		}
-		return toReturn;
+		if (!this.resourceSupply.containsKey(id))
+			return 0;
+		double supply = 8 * this.resourceSupply.get(id);
+		double stock = this.resourceStockpile.get(id);
+		
+		return Math.max(0, (supply - stock)/supply);
 	}
 
 	public String toString()
@@ -134,6 +134,10 @@ public class Sector
 						res[0][1]
 								+ (this.resourceSupply.containsKey(res[0][0]) ? this.resourceSupply
 										.get(res[0][0]) : 0));
+		if (!this.resourceStockpile.containsKey(res[0][0]))
+		{
+			this.resourceStockpile.put((int) res[0][0], 0.0);
+		}
 		for (int i = 1; i < res.length; i++)
 		{
 			this.resourceDemand
@@ -166,11 +170,6 @@ public class Sector
 	public HashMap<Integer, Double> getResourceSupply()
 	{
 		return resourceSupply;
-	}
-
-	public void SendResource(Double[] ship)
-	{
-		this.resourcesInTransit.add(ship);
 	}
 
 	/*public void Pulse()
@@ -296,20 +295,7 @@ public class Sector
 		}
 	}*/
 
-	private void ProduceGoods()
-	{
-		double[][] production;
-
-		for (Factory f : this.factoryList)
-		{
-			production = f.Produce();
-			for (double[] res : production)
-			{
-				this.resourceStockpile.put((int) res[0],
-						this.resourceStockpile.get(res[0]) + res[1]);
-			}
-		}
-	}
+	
 
 	public int getDistance()
 	{
@@ -338,6 +324,17 @@ public class Sector
 
 	public HashMap<Integer, Double> getResourceStockpile()
 	{
+		this.resourceStockpile.entrySet().forEach((a) -> a.setValue(0.0));
+		
+		for (Factory f : this.factoryList)
+		{
+			for (double[] res : f.getStockpile())
+			{
+				double value = this.resourceStockpile.get((int) res[0]) + res[1];
+				this.resourceStockpile.put((int) res[0], value);
+			}
+		}
+		
 		return resourceStockpile;
 	}
 

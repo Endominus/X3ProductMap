@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 
 public class Controller
 {
@@ -15,16 +14,12 @@ public class Controller
 	private static PriorityQueue<Ship> shipQueue = new PriorityQueue<Ship>((sa,
 			sb) -> sa.GetDistance() - sb.GetDistance());
 
-	private static Scanner INPUT_SCANNER = new Scanner(System.in);
-
 	public static long TIME = 1000000;
 
 	public static void main(String[] args) throws ClassNotFoundException
 	{
-		DatabaseShell.InitializeDatabase();
-		InitializeMasterLists();
-		InitializeSectorList();
-
+		Controller.init(null);
+		
 		View v = new View();
 		for (Sector sect : SECTOR_LIST.values())
 		{
@@ -51,7 +46,7 @@ public class Controller
 			SECTOR_LIST = new Hashtable<>();
 			
 			String name;
-			int x, y, id, factid, dist, sSize;
+			int x, y, id, factid, sSize;
 			char race, size;
 			ResultSet rs = DatabaseShell.GetSectors();
 			// sector (id integer primary key, name text, x integer, y integer)
@@ -215,7 +210,6 @@ public class Controller
 
 	private static String ResourceRound(double value)
 	{
-		// TODO Auto-generated method stub
 		return Double.toString(value);
 	}
 
@@ -224,10 +218,17 @@ public class Controller
 	public static final int DEMAND_DISTANCE = 1;
 	private static final long MAX_TIME = 1000000;
 	public static final int TICK_TIME = 1000;
+	public static final double CAP_MULT = 8;
 
 	public static void AddShipEvent(Ship ship)
 	{
-		// TODO Auto-generated method stub
-		
+		shipQueue.add(ship);
+	}
+
+	public static void init(String sectorSource) throws ClassNotFoundException
+	{
+		DatabaseShell.InitializeDatabase(sectorSource);
+		InitializeMasterLists();
+		InitializeSectorList();
 	}
 }

@@ -33,7 +33,7 @@ public class Factory
 			this.resStockpiled[i] = resources[i].clone();
 			this.resStockpiled[i][1] = 0;
 		}
-		
+
 		this.race = race;
 		this.size = size;
 		this.template = defaultType;
@@ -65,28 +65,32 @@ public class Factory
 	{
 		for (int i = 1; i < this.resDemanded.length; i++)
 		{
-			if (this.resDemanded[i][0] == -1)
+			if ((int) this.resDemanded[i][0] == -1)
 			{
-				switch (this.race)
-				{
+				switch (this.race) {
 				case 'A':
 					this.resDemanded[i][0] = 47;
+					this.resStockpiled[i][0] = 47;
 					this.resDemanded[i][1] = -600;
 					break;
 				case 'B':
 					this.resDemanded[i][0] = 23;
+					this.resStockpiled[i][0] = 23;
 					this.resDemanded[i][1] = -150;
 					break;
 				case 'P':
 					this.resDemanded[i][0] = 62;
+					this.resStockpiled[i][0] = 62;
 					this.resDemanded[i][1] = -120;
 					break;
 				case 'S':
 					this.resDemanded[i][0] = 57;
+					this.resStockpiled[i][0] = 57;
 					this.resDemanded[i][1] = -90;
 					break;
 				case 'T':
 					this.resDemanded[i][0] = 53;
+					this.resStockpiled[i][0] = 53;
 					this.resDemanded[i][1] = -600;
 					break;
 				}
@@ -106,15 +110,14 @@ public class Factory
 		// TODO Implement yield calculations
 	}
 
-	public double[][] Produce()
+	public void Produce(int interval)
 	{
-		double[] prod = this.resDemanded[0];
-		double ratio = SatisfactionRatio();
-		prod[1] *= ratio;
+		double prod = this.resDemanded[0][1];
+		double ratio = SatisfactionRatio(interval);
+		prod *= ratio;
 		ConsumeResources(ratio);
 
-		AddToStockpile(prod);
-		return this.resStockpiled;
+		this.resStockpiled[0][1] += prod;
 	}
 
 	private void ConsumeResources(double ratio)
@@ -125,27 +128,18 @@ public class Factory
 		}
 	}
 
-	public void AddToStockpile(double[] prod)
+	private double SatisfactionRatio(int interval)
 	{
-		for (double[] dem : this.resStockpiled)
-		{
-			if (prod[0] == dem[0])
-			{
-				dem[1] += prod[1];
-				break;
-			}
-		}
-	}
-
-	private double SatisfactionRatio()
-	{
-		double ratio = 1, temp;
+		double ratio = interval / 3600.0, temp;
 		for (int i = 1; i < this.resDemanded.length; i++)
 		{
 			temp = (-1.0) * this.resStockpiled[i][1] / this.resDemanded[i][1];
 			ratio = Math.min(ratio, temp);
 		}
 
+		ratio = Math.min(ratio,
+				((resDemanded[0][1] * Controller.CAP_MULT) - resStockpiled[0][1])
+						/ resDemanded[0][1]);
 		return ratio;
 	}
 
@@ -191,12 +185,12 @@ public class Factory
 		}
 		return sb.toString();
 	}
-	
+
 	public void RequestDocking(Ship s)
 	{
 		this.inboundShips.add(s);
 	}
-	
+
 	public void Takeoff(Ship s)
 	{
 		this.inboundShips.remove(s);
@@ -206,10 +200,10 @@ public class Factory
 	{
 		return resDemanded;
 	}
-	
+
 	public double[][] getStockpile()
 	{
-		return resDemanded;
+		return resStockpiled;
 	}
 
 	public int getTemplate()
@@ -231,10 +225,10 @@ public class Factory
 	{
 		return name;
 	}
-	
+
 	public void Transfer(int wareLocation, int wareAmount)
 	{
-		this.resStockpiled[wareLocation][1] += wareAmount;		
+		this.resStockpiled[wareLocation][1] += wareAmount;
 	}
 
 	public void NotifyDockingQueue(int ware)

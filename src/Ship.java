@@ -177,12 +177,11 @@ public class Ship
 	 */
 	private double FindOptimalFactory(double baseline, Sector sect, Factory fact)
 	{
-		// TODO Magic number here; shall I keep it? Check factory
-		// stockpile max
 		if (this.buying)
 		{
 			double stock = fact.getStockpile()[0][1]
-					/ (fact.getResources()[0][1] * 8) - distance / 10.0;
+					/ (fact.getResources()[0][1] * Controller.CAP_MULT)
+					- distance / 10.0;
 			if (stock > baseline)
 			{
 				baseline = stock;
