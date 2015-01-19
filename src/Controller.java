@@ -11,13 +11,13 @@ public class Controller
 {
 	public static Hashtable<Integer, String> MASTER_RESOURCE_LIST;
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
-	private static Hashtable<Integer, Sector> SECTOR_LIST;
+	public static Hashtable<Integer, Sector> SECTOR_LIST;
 	private static PriorityQueue<Ship> shipQueue = new PriorityQueue<Ship>((sa,
 			sb) -> sa.GetDistance() - sb.GetDistance());
 
-	static Scanner INPUT_SCANNER = new Scanner(System.in);
+	private static Scanner INPUT_SCANNER = new Scanner(System.in);
 
-	private static long TIME = 1000000;
+	public static long TIME = 1000000;
 
 	public static void main(String[] args) throws ClassNotFoundException
 	{

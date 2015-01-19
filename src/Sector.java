@@ -350,4 +350,9 @@ public class Sector
 	{
 		return this.id;
 	}
+
+	public int getSize()
+	{
+		return size;
+	}
 }

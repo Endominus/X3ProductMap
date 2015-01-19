@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -10,14 +12,19 @@ import java.util.Queue;
  * factory, after which a new target is set 3. Interrupted journey, when a new
  * target must be found in the middle of the old one
  * 
- * Flow for a successful trade operation are as follows; 1. Find a factory to
- * buy from, using FindWaresToBuy 2. Plan the journey to that factory with
- * PlanJourney 2a. If the InterruptJourney signal is received, GOTO 1. 3.
- * Arriving at the factory, receive the Trade command 4. Find a factory to sell
- * to, using FindBuyer. 5. Plan the journey to that factory with PlanJourney 5a.
- * If the InterruptJourney signal is received, GOTO 1. 6. Arriving at the
- * factory, receive the Trade command 7. If cargo bay is empty, GOTO 1. 8. Else,
- * GOTO 4.
+ * Flow for a successful trade operation are as follows;
+ * 
+ * 1. Find a factory to trade with, using GenerateDestination
+ * 
+ * 1a. If no factory is found, delay for 1000 units and GOTO 1.
+ * 
+ * 2. Plan the journey to that factory with LogFlightPlan
+ * 
+ * 2a. If the InterruptJourney signal is received, AcquireLocation and GOTO 1.
+ * 
+ * 3. Arriving at the factory, receive the Trade command
+ * 
+ * 4. GOTO 1.
  * 
  * Whenever a Ship arrives at a Factory, it can safely assume that it is the
  * first Ship at that factory to complete whatever transaction it is attempting
@@ -30,11 +37,15 @@ public class Ship
 {
 	// Distance is a time value, not a length
 	private int wi, wa, waMax, distance, speed;
+	long startTime;
 	private Queue<int[]> milestones = new LinkedList<>();
 	private Factory fDest = null;
 	private Sector sStart, sEnd;
-
 	private boolean buying;
+
+	private static PriorityQueue<Node> pns = new PriorityQueue<Node>(
+			(a, b) -> Integer.compare(a.manhattan, b.manhattan));
+	private static HashMap<Integer, Node> nm = new HashMap<>();
 
 	public Ship(int cap, int speed, Sector s)
 	{
@@ -45,52 +56,7 @@ public class Ship
 		this.buying = true;
 		this.sStart = s;
 
-		FindWaresToBuy();
-	}
-
-	private void FindWaresToBuy()
-	{
-		this.sStart.setDistance(-1);
-		this.fDest = null;
-		double maxStock = 0.5;
-		Queue<Sector> q = new LinkedList<>();
-		ArrayList<Sector> traversed = new ArrayList<>();
-		ArrayList<Factory> factories = new ArrayList<>();
-		Sector s;
-
-		q.add(this.sStart);
-		q.addAll(this.sStart.getSectorList());
-		q.forEach((sect) -> sect.setDistance(sect.getDistance() + 1));
-
-		while (!q.isEmpty())
-		{
-			s = q.poll();
-			final int distance = s.getDistance();
-			factories = s.getFactoryList();
-
-			for (Factory fact : factories)
-			{
-				maxStock = FindOptimalFactory(maxStock, s, fact);
-			}
-
-			if (distance < Controller.MAX_TRAVEL_DISTANCE)
-			{
-				// Watch this; expecting a bug from wrong distance reporting
-				s.getSectorList().forEach((sect) -> {
-					if (sect.getDistance() == 0)
-					{
-						sect.setDistance(distance + 1);
-						q.add(sect);
-						traversed.add(sect);
-					}
-				});
-			}
-		}
-
-		for (Sector sect : traversed)
-		{
-			sect.setDistance(0);
-		}
+		GenerateDestination();
 	}
 
 	private void LogFlightPlan(int traversed)
@@ -101,7 +67,7 @@ public class Ship
 			fDest.RequestDocking(this);
 		} else
 		{
-			this.distance = Controller.TICK_TIME + 1000;
+			this.distance = 1000;
 		}
 
 		Controller.AddShipEvent(this);
@@ -112,7 +78,6 @@ public class Ship
 	 */
 	public void Trade()
 	{
-		// TODO Implement trading, including reassigning other interested ships
 		this.fDest.Takeoff(this);
 		this.fDest.NotifyDockingQueue(this.wi);
 		if (this.buying)
@@ -140,26 +105,21 @@ public class Ship
 			}
 		}
 
-		int remainder = this.sEnd.getDistance();
+		int remainder = this.sEnd.getSize() / 2;
 		this.sStart = this.sEnd;
-		if (this.buying)
-		{
-			FindWaresToBuy();
-		} else
-		{
-			FindBuyer();
-		}
+		GenerateDestination();
 		LogFlightPlan(remainder);
+
 	}
 
 	/**
-	 * Finds the best buyer for the wares carried among all sectors within
-	 * travel distance
+	 * Finds the best factory to land at for trading purposes, whether buying or
+	 * selling.
+	 * 
+	 * If no factory can be found,
 	 */
-	private void FindBuyer()
+	private boolean GenerateDestination()
 	{
-		// TODO Lots of code duplication between this and FindWaresToBuy;
-		// reduce?
 		this.sStart.setDistance(-1);
 		this.fDest = null;
 		double minStock = 0.5;
@@ -200,6 +160,8 @@ public class Ship
 		{
 			s2.setDistance(0);
 		}
+
+		return minStock != 0.5;
 	}
 
 	/**
@@ -253,8 +215,17 @@ public class Ship
 
 	private int AcquireLocation()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		int interval = (int) (Controller.TIME - this.startTime);
+
+		for (int[] a : this.milestones)
+		{
+			if (a[1] > interval)
+			{
+				this.sStart = Controller.SECTOR_LIST.get(a[0]);
+				return a[1] - interval;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -266,18 +237,75 @@ public class Ship
 	 */
 	private int PlanJourney(int traversed)
 	{
-		int totalDistance = 100;
+		this.startTime = Controller.TIME;
+
+		int totalDistance;
 		if (this.sEnd == this.sStart)
 		{
-			totalDistance = 100;
+			totalDistance = this.sStart.getSize() / 4;
+
+			this.milestones.clear();
+			this.milestones
+					.add(new int[] { this.sStart.getId(), totalDistance });
+		} else
+		{
+			totalDistance = this.sStart.getSize() - traversed;
+			// Impatient algorithm for now.
+			// TODO Replace with something more efficient
+			Ship.pns.clear();
+			Ship.nm.clear();
+
+			Node n = new Node(null, sStart, totalDistance);
+			nm.put(this.sStart.getId(), n);
+
+			while (n.s != this.sEnd)
+			{
+				for (Sector s : n.s.getSectorList())
+				{
+					if (!nm.containsKey(s.getId()))
+					{
+						Node nNew = new Node(n, s, n.distance);
+						nm.put(s.getId(), nNew);
+						pns.add(nNew);
+					} else if (nm.get(s.getId()).getParentDistance() > n.distance)
+					{
+						nm.get(s.getId()).setParent(n);
+					}
+				}
+
+				n = pns.poll();
+			}
+
+			n.distance -= n.s.getSize() / 2;
+
+			totalDistance = n.getDistance();
+
+			this.milestones.clear();
+			Enqueue(n);
 		}
 		return totalDistance;
 	}
 
+	private void Enqueue(Node n)
+	{
+		if (n.parent != null)
+		{
+			Enqueue(n.parent);
+		}
+		this.milestones.add(new int[] { n.s.getId(),
+				n.getDistance() * 100 / this.speed });
+	}
+
 	public void InterruptJourney(int wareID)
 	{
-		// TODO Implement this function
-		int remainder = AcquireLocation();
+		if (wareID == this.wi)
+		{
+			this.fDest.Takeoff(this);
+
+			int remainder = AcquireLocation();
+			GenerateDestination();
+			LogFlightPlan(remainder);
+		}
 	}
 
 	public Factory getDestination()
@@ -293,6 +321,57 @@ public class Ship
 	public int GetDistance()
 	{
 		return this.distance;
+	}
+
+	private class Node extends Object
+	{
+		public int distance, manhattan;
+		private Node parent;
+		public Sector s;
+
+		public Node(Node p, Sector s, int dist)
+		{
+			this.parent = p;
+			this.s = s;
+			this.distance = dist + s.getSize();
+
+			this.manhattan = Math.abs(s.getCoords()[0] - sEnd.getCoords()[0])
+					+ Math.abs(s.getCoords()[1] - sEnd.getCoords()[1]);
+		}
+
+		// Called after distance is reduced to change settings in
+		// children/reacquire them.
+		public void PollChildren()
+		{
+			for (Sector s : this.s.getSectorList())
+			{
+				if (Ship.nm.get(s.getId()).getParentDistance() > this.distance)
+				{
+					Ship.nm.get(s.getId()).setParent(this);
+				}
+			}
+		}
+
+		public int getParentDistance()
+		{
+			if (this.parent != null)
+			{
+				return this.parent.distance;
+			}
+			return 0;
+		}
+
+		public int getDistance()
+		{
+			return this.distance;
+		}
+
+		public void setParent(Node parent)
+		{
+			this.parent = parent;
+			this.distance = parent.getDistance() + s.getSize();
+			PollChildren();
+		}
 	}
 
 }
