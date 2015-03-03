@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -60,10 +61,37 @@ public class View extends JFrame implements ActionListener
 		
 		this.buttonPanel = new JPanel();
 		this.buttonPanel.setPreferredSize(new Dimension(400, 450));
+		
 		JButton newFactoryButton = new JButton("New Factory");
 		newFactoryButton.setPreferredSize(new Dimension(200, 50));
 		newFactoryButton.setFont(new Font(null, Font.PLAIN, 20));
 		this.buttonPanel.add(newFactoryButton);
+		
+		JButton deleteFactoryButton = new JButton("Delete Factory");
+		deleteFactoryButton.setPreferredSize(new Dimension(200, 50));
+		deleteFactoryButton.setFont(new Font(null, Font.PLAIN, 20));
+		this.buttonPanel.add(deleteFactoryButton);
+
+		JButton saveStateButton = new JButton("Save State");
+		saveStateButton.setPreferredSize(new Dimension(200, 50));
+		saveStateButton.setFont(new Font(null, Font.PLAIN, 20));
+		this.buttonPanel.add(saveStateButton);
+
+		JButton loadStateButton = new JButton("Load State");
+		loadStateButton.setPreferredSize(new Dimension(200, 50));
+		loadStateButton.setFont(new Font(null, Font.PLAIN, 20));
+		this.buttonPanel.add(loadStateButton);
+
+		JComboBox<String> resFlowButton = new JComboBox<>();
+		resFlowButton.setPreferredSize(new Dimension(200, 50));
+		resFlowButton.setFont(new Font(null, Font.PLAIN, 20));
+		resFlowButton.addItem("Placeholder");
+		this.buttonPanel.add(resFlowButton);
+
+		JButton clearButton = new JButton("Clear");
+		clearButton.setPreferredSize(new Dimension(200, 50));
+		clearButton.setFont(new Font(null, Font.PLAIN, 20));
+		this.buttonPanel.add(clearButton);
 		
 		this.statsText = new JTextArea();
 		this.statsText.setEditable(false);

@@ -150,7 +150,7 @@ public class Controller
 		TIME = 0;
 		while (TIME < MAX_TIME)
 		{
-
+			TIME++;
 		}
 	}
 
