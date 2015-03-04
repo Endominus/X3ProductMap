@@ -147,10 +147,12 @@ public class Controller
 	 */
 	public static void Pulse()
 	{
-		TIME = 0;
 		while (TIME < MAX_TIME)
 		{
-			TIME++;
+			//TODO: Check Javadoc for these functions
+			Ship s = shipQueue.poll();
+			TIME = s.GetDistance();
+			s.Trade();
 		}
 	}
 
@@ -214,10 +216,10 @@ public class Controller
 	}
 
 	// Constants
-	public static final int MAX_TRAVEL_DISTANCE = 2;
-	public static final int DEMAND_DISTANCE = 1;
+	public static final int MAX_TRAVEL_DISTANCE = 3;
+	//public static final int DEMAND_DISTANCE = 1;
 	private static final long MAX_TIME = 1000000;
-	public static final int TICK_TIME = 1000;
+	public static final int TICK_TIME = 3600;
 	public static final double CAP_MULT = 8;
 
 	public static void AddShipEvent(Ship ship)
@@ -230,5 +232,7 @@ public class Controller
 		DatabaseShell.InitializeDatabase(sectorSource);
 		InitializeMasterLists();
 		InitializeSectorList();
+		
+		TIME = 0;
 	}
 }

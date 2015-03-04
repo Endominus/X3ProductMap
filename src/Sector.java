@@ -8,7 +8,7 @@ public class Sector
 	private String name;
 	private ArrayList<Factory> factoryList = new ArrayList<>();
 	private ArrayList<Sector> sectorList = new ArrayList<>();
-	private ArrayList<Double[]> resourcesInTransit = new ArrayList<>();
+	//private ArrayList<Double[]> resourcesInTransit = new ArrayList<>();
 	private HashMap<Integer, Double> resourceDemand = new HashMap<>();
 	private HashMap<Integer, Double> resourceSupply = new HashMap<>();
 	private HashMap<Integer, Double> resourceStockpile = new HashMap<>();
@@ -31,6 +31,12 @@ public class Sector
 		}
 	}
 
+	/***
+	 * The net flow (ideal) of a good from this sector.
+	 * 
+	 * @param id of good
+	 * @return net flow if production and consumption were maximized
+	 */
 	public double NetFlow(int id)
 	{
 		double demand = 0;

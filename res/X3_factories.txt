@@ -693,8 +693,6 @@ size:M
 wares:
 	-ware_id:32
 	 ware_amount:8420.34
-	-ware_id:28
-	 ware_amount:-61.02
 ---
 id:58
 name:Soyery
@@ -866,5 +864,14 @@ wares:
 	 ware_amount:600
 	-ware_id:32
 	 ware_amount:-900
+---
+id:73
+name:Solar Power Plant (Player)
+size:M
+wares:
+	-ware_id:32
+	 ware_amount:8420.34
+	-ware_id:28
+	 ware_amount:-61.02
 ---
 ...

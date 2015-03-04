@@ -32,31 +32,12 @@ public class DatabaseShell
 			GenerateFactories();
 			GenerateSectors(sectorSource);
 			
-//			ResultSet rs = statement.executeQuery("select * from factoryio where factoryid = 0");
-//			
-//			while (rs.next())
-//			{
-//				System.out.println("id: " + rs.getInt(2));
-//				System.out.println("amount: " + rs.getDouble(3));
-//			}
-			
 		} catch (SQLException | IOException e)
 		{
 			// if the error message is "out of memory",
 			// it probably means no database file is found
 			System.err.println(e.getMessage());
-		} /*finally
-		{
-			try
-			{
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e)
-			{
-				// connection close failed.
-				System.err.println(e);
-			}
-		}*/
+		}
 	}
 
 	private static void GenerateSectors(String source) throws SQLException, IOException

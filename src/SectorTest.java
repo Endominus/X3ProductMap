@@ -30,14 +30,18 @@ public class SectorTest
 		for (double total : ss.get(0).getResourceStockpile().values())
 			assertTrue(total == 0.0);
 		
-		this.ss.get(0).ProduceGoods(3600);
+		ss.get(0).getFactoryList().get(1).Transfer(1, 2250);
+		
+		this.ss.get(0).ProduceGoods(Controller.TICK_TIME);
 		
 		for (Entry<Integer, Double> res : ss.get(0).getResourceStockpile().entrySet())
 		{
 			if (res.getKey() == 32)
 				assertTrue(res.getValue() == 8420.34);
+			else if (res.getKey() == 54)
+				assertTrue(res.getValue() == 375);
 			else
-				assertTrue(res.getValue() == 0);
+				assertTrue(false);
 		}
 		
 		for (double total : ss.get(1).getResourceStockpile().values())

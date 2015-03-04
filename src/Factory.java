@@ -130,7 +130,7 @@ public class Factory
 
 	private double SatisfactionRatio(int interval)
 	{
-		double ratio = interval / 3600.0, temp;
+		double ratio = 1.0 * interval / Controller.TICK_TIME, temp;
 		for (int i = 1; i < this.resDemanded.length; i++)
 		{
 			temp = (-1.0) * this.resStockpiled[i][1] / this.resDemanded[i][1];

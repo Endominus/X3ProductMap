@@ -78,38 +78,40 @@ public class Ship
 	 */
 	public void Trade()
 	{
-		this.fDest.Takeoff(this);
-		this.fDest.NotifyDockingQueue(this.wi);
-		if (this.buying)
+		if (this.fDest != null)
 		{
-			int transferAmount = (int) Math.min(this.waMax,
-					this.fDest.getStockpile()[0][1]);
-			this.wi = (int) this.fDest.getResources()[0][0];
-			this.wa = transferAmount;
-			this.fDest.Transfer(0, -transferAmount);
-			this.buying = !this.buying;
-		} else
-		{
-			int wii;
-			for (wii = 1; (int) this.fDest.getResources()[wii][0] != this.wi; wii++)
-				;
-			int wa = (int) Math.min(this.wa, this.fDest.getResources()[wii][1]
-					* 8 - this.fDest.getStockpile()[wii][1]);
-			this.wa -= wa;
-			this.fDest.Transfer(wii, wa);
-
-			if (this.wa == 0)
+			this.fDest.Takeoff(this);
+			this.fDest.NotifyDockingQueue(this.wi);
+			if (this.buying)
 			{
-				this.wi = -1;
+				int transferAmount = (int) Math.min(this.waMax,
+						this.fDest.getStockpile()[0][1]);
+				this.wi = (int) this.fDest.getResources()[0][0];
+				this.wa = transferAmount;
+				this.fDest.Transfer(0, -transferAmount);
 				this.buying = !this.buying;
+			} else
+			{
+				int wii;
+				for (wii = 1; (int) this.fDest.getResources()[wii][0] != this.wi; wii++)
+					;
+				int wa = (int) Math.min(this.wa, this.fDest.getResources()[wii][1]
+						* 8 - this.fDest.getStockpile()[wii][1]);
+				this.wa -= wa;
+				this.fDest.Transfer(wii, wa);
+	
+				if (this.wa == 0)
+				{
+					this.wi = -1;
+					this.buying = !this.buying;
+				}
 			}
+	
+			this.sStart = this.sEnd;
 		}
-
-		int remainder = this.sEnd.getSize() / 2;
-		this.sStart = this.sEnd;
+		int remainder = this.sStart.getSize() / 2;
 		GenerateDestination();
 		LogFlightPlan(remainder);
-
 	}
 
 	/**
@@ -277,7 +279,7 @@ public class Ship
 
 			n.distance -= n.s.getSize() / 2;
 
-			totalDistance = n.getDistance();
+			totalDistance = n.getDistance() * 100 / this.speed;
 
 			this.milestones.clear();
 			Enqueue(n);
