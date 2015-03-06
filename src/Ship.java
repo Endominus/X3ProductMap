@@ -16,7 +16,7 @@ import java.util.Queue;
  * 
  * 1. Find a factory to trade with, using GenerateDestination
  * 
- * 1a. If no factory is found, delay for 1000 units and GOTO 1.
+ * 1a. If no factory is found, delay for TICK_TIME units and GOTO 1.
  * 
  * 2. Plan the journey to that factory with LogFlightPlan
  * 
@@ -36,8 +36,8 @@ import java.util.Queue;
 public class Ship
 {
 	// Distance is a time value, not a length
-	private int wi, wa, waMax, distance, speed;
-	long startTime;
+	private int wi, wa, waMax, distance, speed, id;
+	int startTime;
 	private Queue<int[]> milestones = new LinkedList<>();
 	private Factory fDest = null;
 	private Sector sStart, sEnd;
@@ -59,6 +59,19 @@ public class Ship
 		GenerateDestination();
 	}
 
+	public Ship(int cap, int speed, Sector s, int id)
+	{
+		this.waMax = cap;
+		this.speed = speed;
+		this.wi = -1;
+		this.wa = 0;
+		this.buying = true;
+		this.sStart = s;
+		this.id = id;
+
+		GenerateDestination();
+	}
+
 	private void LogFlightPlan(int traversed)
 	{
 		if (fDest != null)
@@ -67,7 +80,7 @@ public class Ship
 			fDest.RequestDocking(this);
 		} else
 		{
-			this.distance = 1000;
+			this.distance = Controller.TICK_TIME;
 		}
 
 		Controller.AddShipEvent(this);
@@ -136,6 +149,7 @@ public class Ship
 		while (!q.isEmpty())
 		{
 			s = q.poll();
+			ss.add(s);
 			final int distance = s.getDistance();
 			fs = s.getFactoryList();
 
@@ -144,7 +158,7 @@ public class Ship
 				minStock = FindOptimalFactory(minStock, s, fact);
 			}
 
-			if (distance < Controller.MAX_TRAVEL_DISTANCE)
+			if (s.getDistance() < Controller.MAX_TRAVEL_DISTANCE)
 			{
 				// Watch this; expecting a bug from wrong distance reporting
 				s.getSectorList().forEach((sect) -> {
@@ -183,7 +197,7 @@ public class Ship
 		{
 			double stock = fact.getStockpile()[0][1]
 					/ (fact.getResources()[0][1] * Controller.CAP_MULT)
-					- distance / 10.0;
+					- sect.getDistance() / 10.0;
 			if (stock > baseline)
 			{
 				baseline = stock;
@@ -309,7 +323,12 @@ public class Ship
 		}
 	}
 
-	public Factory getDestination()
+	public int GetId()
+	{
+		return id;
+	}
+	
+	public Factory GetDestination()
 	{
 		return fDest;
 	}
@@ -322,6 +341,11 @@ public class Ship
 	public int GetDistance()
 	{
 		return this.distance;
+	}
+
+	public int GetArrivalTime()
+	{
+		return this.distance + this.startTime;
 	}
 
 	private class Node extends Object

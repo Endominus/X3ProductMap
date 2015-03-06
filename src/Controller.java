@@ -12,9 +12,9 @@ public class Controller
 	public static Hashtable<Integer, Factory> MASTER_FACTORY_LIST;
 	public static Hashtable<Integer, Sector> SECTOR_LIST;
 	private static PriorityQueue<Ship> shipQueue = new PriorityQueue<Ship>((sa,
-			sb) -> sa.GetDistance() - sb.GetDistance());
+			sb) -> sa.GetArrivalTime() - sb.GetArrivalTime());
 
-	public static long TIME = 1000000;
+	public static int TIME = 1000000;
 
 	public static void main(String[] args) throws ClassNotFoundException
 	{
@@ -85,7 +85,6 @@ public class Controller
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -129,7 +128,6 @@ public class Controller
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -140,19 +138,19 @@ public class Controller
 		sect2.AddSector(sect1);
 	}
 
-	/**
-	 * Pulses every sector for production and requisition. Consists of these
-	 * steps; 1. Production using stockpiled resources 2. Searching for
-	 * somewhere to offload produced resources
-	 */
 	public static void Pulse()
 	{
 		while (TIME < MAX_TIME)
 		{
 			//TODO: Check Javadoc for these functions
-			Ship s = shipQueue.poll();
-			TIME = s.GetDistance();
-			s.Trade();
+			Ship sh = shipQueue.poll();
+			int newTime = sh.GetArrivalTime();
+			
+			for (Sector s : SECTOR_LIST.values())
+			{
+				s.ProduceGoods(newTime - TIME);
+			}
+			sh.Trade();
 		}
 	}
 
