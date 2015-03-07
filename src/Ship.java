@@ -347,6 +347,16 @@ public class Ship
 	{
 		return this.distance + this.startTime;
 	}
+	
+	public int GetWareId()
+	{
+		return this.wi;
+	}
+	
+	public int GetWareAmount()
+	{
+		return this.wa;
+	}
 
 	private class Node extends Object
 	{

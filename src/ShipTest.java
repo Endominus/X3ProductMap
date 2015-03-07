@@ -25,13 +25,13 @@ public class ShipTest
 		Controller.init("res/X3_sectors.txt");
 		this.ss = new ArrayList<Sector>(Controller.SECTOR_LIST.values());
 		this.ss.sort((a, b) -> a.getName().compareTo(b.getName()));
-		Ship sh = new Ship(1000, 100, ss.get(0), 0);
+		Ship sh = new Ship(6000, 100, ss.get(0), 0);
 		shs.add(sh);
-		sh = new Ship(1000, 100, ss.get(1), 1);
+		sh = new Ship(6000, 100, ss.get(1), 1);
 		shs.add(sh);
-		sh = new Ship(1000, 100, ss.get(2), 2);
+		sh = new Ship(6000, 100, ss.get(2), 2);
 		shs.add(sh);
-		sh = new Ship(1000, 100, ss.get(3), 3);
+		sh = new Ship(6000, 100, ss.get(3), 3);
 		shs.add(sh);
 	}
 
@@ -72,6 +72,35 @@ public class ShipTest
 			else
 				assertTrue(sh.GetDestination() == f);
 		}
+		
+		assertTrue(this.shs.get(0).GetDistance() == 5000);
+		assertTrue(this.shs.get(1).GetDistance() == 15000);
+		assertTrue(this.shs.get(2).GetDistance() == 15000);
+		
+		int newTime = shs.get(0).GetArrivalTime();
+		
+		for (Sector s : ss)
+		{
+			s.ProduceGoods(newTime - Controller.TIME);
+		}
+		Controller.TIME = newTime;
+		shs.get(0).Trade();
+		
+		f = FindFactory("SectorA", 41);
+		
+		assertFalse(shs.get(0).isBuying());
+		assertTrue(shs.get(0).GetWareId() == 32);
+		assertTrue(shs.get(0).GetWareAmount() == 6000);
+		assertTrue(shs.get(0).GetDestination() == f);
+		assertTrue(shs.get(1).GetDestination() == null);
+		assertTrue(shs.get(2).GetDestination() == null);
+		assertTrue(shs.get(3).GetDestination() == null);
+		
+		double[][] stock = f.getStockpile();
+		assertTrue(stock[1][1] == 0);
+		shs.get(0).Trade();
+		stock = f.getStockpile();
+		assertTrue(stock[1][1] == 6000);
 	}
 	
 	private void Tick()

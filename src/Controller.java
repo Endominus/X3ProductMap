@@ -142,7 +142,6 @@ public class Controller
 	{
 		while (TIME < MAX_TIME)
 		{
-			//TODO: Check Javadoc for these functions
 			Ship sh = shipQueue.poll();
 			int newTime = sh.GetArrivalTime();
 			
@@ -150,6 +149,7 @@ public class Controller
 			{
 				s.ProduceGoods(newTime - TIME);
 			}
+			Controller.TIME = newTime;
 			sh.Trade();
 		}
 	}
