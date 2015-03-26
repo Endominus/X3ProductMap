@@ -14,8 +14,6 @@ public class Controller
 	private static PriorityQueue<Ship> shipQueue = new PriorityQueue<Ship>((sa,
 			sb) -> sa.GetArrivalTime() - sb.GetArrivalTime());
 
-	public static int TIME = 1000000;
-
 	public static void main(String[] args) throws ClassNotFoundException
 	{
 		Controller.init(null);
@@ -27,15 +25,7 @@ public class Controller
 					sect.getCoords()[1]);
 		}
 		
-		//System.out.print(SECTOR_LIST.get(0).toString());
-		//System.out.print(SECTOR_LIST.get(1).toString());
-
-		/*
-		 * while (TIME < 1000000) { Pulse(); // shipQueue = new
-		 * PriorityQueue<Ship>((sa, sb) -> sa.GetDistance() // -
-		 * sb.GetDistance()); }/*
-		 */
-		// return 0;
+		Pulse();
 
 	}
 
@@ -49,10 +39,6 @@ public class Controller
 			int x, y, id, factid, sSize;
 			char race, size;
 			ResultSet rs = DatabaseShell.GetSectors();
-			// sector (id integer primary key, name text, x integer, y integer)
-			// sectorlink (sect1id integer, sect2id integer, distance integer
-			// sectorcontent (sectid integer, factid integer, race text, size
-			// text, distance integer, yield real
 			while (rs.next())
 			{
 				id = rs.getInt(1);
@@ -140,17 +126,36 @@ public class Controller
 
 	public static void Pulse()
 	{
+		int counter = 0, aggTime = TIME;
 		while (TIME < MAX_TIME)
 		{
 			Ship sh = shipQueue.poll();
 			int newTime = sh.GetArrivalTime();
 			
+			aggTime += newTime - Controller.TIME;
+			boolean census = aggTime >= 5*Controller.TICK_TIME;
+			
 			for (Sector s : SECTOR_LIST.values())
 			{
 				s.ProduceGoods(newTime - TIME);
+				if (census)
+				{
+					s.TakeCensus();
+				}
 			}
 			Controller.TIME = newTime;
 			sh.Trade();
+			
+			if (census)
+			{
+				counter++;
+				aggTime -= 5*Controller.TICK_TIME;
+			}
+		}
+		
+		for (Sector s : SECTOR_LIST.values())
+		{
+			s.RegulateCensus(counter);
 		}
 	}
 
@@ -165,11 +170,12 @@ public class Controller
 		Sector sect = SECTOR_LIST.get(sectorID);
 		int key;
 		double value;
-
-		sb.append("Name: " + sect.getName() + "\n\n");
-		sb.append("Produces\t    Consumes\n");
 		HashMap<Integer, Double> demand = sect.getResourceDemand();
 		HashMap<Integer, Double> supply = sect.getResourceSupply();
+		HashMap<Integer, Double> fulfil = sect.getAvgStockpile();
+				
+		sb.append("Name: " + sect.getName() + "\n\n");
+		sb.append("Produces\t    Consumes\n");
 
 		// Clever, but not useful right now
 		for (Entry<Integer, Double> res : demand.entrySet())
@@ -204,6 +210,16 @@ public class Controller
 						MASTER_RESOURCE_LIST.get(key)));
 			}
 		}
+		
+		sb.append("\nAverage Stockpiles of resources;\n");
+
+		for (Entry<Integer, Double> res : fulfil.entrySet())
+		{
+			key = res.getKey();
+			value = res.getValue();
+			
+			sb.append(String.format("%1s: %2s", MASTER_RESOURCE_LIST.get(key), ResourceRound(value)));
+		}
 
 		return sb.toString();
 	}
@@ -216,9 +232,10 @@ public class Controller
 	// Constants
 	public static final int MAX_TRAVEL_DISTANCE = 3;
 	//public static final int DEMAND_DISTANCE = 1;
-	private static final long MAX_TIME = 1000000;
+	private static final long MAX_TIME = 3600000;
 	public static final int TICK_TIME = 3600;
 	public static final double CAP_MULT = 8;
+	public static int TIME = 0;
 
 	public static void AddShipEvent(Ship ship)
 	{
@@ -230,6 +247,12 @@ public class Controller
 		DatabaseShell.InitializeDatabase(sectorSource);
 		InitializeMasterLists();
 		InitializeSectorList();
+		
+		for (Sector s : Controller.SECTOR_LIST.values())
+		{
+			@SuppressWarnings("unused")
+			Ship sh = new Ship(6000, 100, s);
+		}
 		
 		TIME = 0;
 	}

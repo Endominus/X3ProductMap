@@ -11,6 +11,7 @@ public class Factory
 	private char race;
 	private String name;
 	private ArrayList<Ship> inboundShips = new ArrayList<>();
+	private ArrayList<Ship> inboundShipList = new ArrayList<>();
 
 	public Factory(double[][] res, int t, char s, String n)
 	{
@@ -188,7 +189,10 @@ public class Factory
 
 	public void RequestDocking(Ship s)
 	{
-		this.inboundShips.add(s);
+		if (this.inboundShips.contains(s))
+			this.inboundShipList.add(s);
+		else
+			this.inboundShips.add(s);
 	}
 
 	public void Takeoff(Ship s)
@@ -233,9 +237,18 @@ public class Factory
 
 	public void NotifyDockingQueue(int ware)
 	{
-		for (Ship s : this.inboundShips)
-		{
-			s.InterruptJourney(ware);
-		}
+////		for (Iterator<Ship> shit = this.inboundShips.iterator(); shit.hasNext();)
+////		{
+////			
+////		}
+//		for (Ship s : this.inboundShips)
+//		{
+//			if (s.InterruptJourney(ware))
+//			{
+//				this.inboundShips.remove(s);
+//			}
+//		}
+		
+		this.inboundShips.removeIf(s -> s.InterruptJourney(ware));
 	}
 }

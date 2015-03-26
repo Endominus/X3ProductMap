@@ -264,7 +264,7 @@ public class Ship
 					.add(new int[] { this.sStart.getId(), totalDistance });
 		} else
 		{
-			totalDistance = this.sStart.getSize() - traversed;
+			totalDistance = -1 * traversed;
 			// Impatient algorithm for now.
 			// TODO Replace with something more efficient
 			Ship.pns.clear();
@@ -311,16 +311,18 @@ public class Ship
 				n.getDistance() * 100 / this.speed });
 	}
 
-	public void InterruptJourney(int wareID)
+	public boolean InterruptJourney(int wareID)
 	{
 		if (wareID == this.wi)
 		{
-			this.fDest.Takeoff(this);
-
 			int remainder = AcquireLocation();
 			GenerateDestination();
 			LogFlightPlan(remainder);
+			
+			return true;
 		}
+		
+		return false;
 	}
 
 	public int GetId()

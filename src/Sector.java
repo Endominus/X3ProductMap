@@ -8,21 +8,25 @@ public class Sector
 	private String name;
 	private ArrayList<Factory> factoryList = new ArrayList<>();
 	private ArrayList<Sector> sectorList = new ArrayList<>();
-	//private ArrayList<Double[]> resourcesInTransit = new ArrayList<>();
+	// private ArrayList<Double[]> resourcesInTransit = new ArrayList<>();
 	private HashMap<Integer, Double> resourceDemand = new HashMap<>();
 	private HashMap<Integer, Double> resourceSupply = new HashMap<>();
 	private HashMap<Integer, Double> resourceStockpile = new HashMap<>();
 	private int distance, id, size;
 	private int[] coords;
 
+	// TODO Change this to a struct to find trends more easily
+	// Need avg delta in addition to raw average
+	private HashMap<Integer, Double> avgStockpile = new HashMap<>();
+
 	public Sector(String n, int id, int size, int x, int y)
 	{
 		this.name = n;
 		this.id = id;
 		this.size = size;
-		this.coords = new int[] {x, y};
+		this.coords = new int[] { x, y };
 	}
-	
+
 	public void ProduceGoods(int interval)
 	{
 		for (Factory f : this.factoryList)
@@ -34,7 +38,8 @@ public class Sector
 	/***
 	 * The net flow (ideal) of a good from this sector.
 	 * 
-	 * @param id of good
+	 * @param id
+	 *            of good
 	 * @return net flow if production and consumption were maximized
 	 */
 	public double NetFlow(int id)
@@ -59,18 +64,35 @@ public class Sector
 			return 0;
 		double demand = -8 * this.resourceDemand.get(id);
 		double stock = this.resourceStockpile.get(id);
-		
-		return Math.max(0, (demand - stock)/demand);
+
+		return Math.max(0, (demand - stock) / demand);
 	}
-	
+
 	public double SupplyFactor(int id)
 	{
 		if (!this.resourceSupply.containsKey(id))
 			return 0;
 		double supply = 8 * this.resourceSupply.get(id);
 		double stock = this.resourceStockpile.get(id);
-		
-		return Math.max(0, (supply - stock)/supply);
+
+		return Math.max(0, (supply - stock) / supply);
+	}
+
+	public void TakeCensus()
+	{
+		for (Entry<Integer, Double> res : this.resourceStockpile.entrySet())
+		{
+			avgStockpile.put(res.getKey(), avgStockpile.get(res.getKey())
+					+ (res.getValue() / Controller.CAP_MULT));
+		}
+	}
+	
+	public void RegulateCensus(int div)
+	{
+		for (Entry<Integer, Double> res : this.avgStockpile.entrySet())
+		{
+			avgStockpile.put(res.getKey(), res.getValue() / div);
+		}
 	}
 
 	public String toString()
@@ -143,6 +165,7 @@ public class Sector
 		if (!this.resourceStockpile.containsKey(res[0][0]))
 		{
 			this.resourceStockpile.put((int) res[0][0], 0.0);
+			this.avgStockpile.put((int) res[0][0], 0.0);
 		}
 		for (int i = 1; i < res.length; i++)
 		{
@@ -167,7 +190,7 @@ public class Sector
 	{
 		return name;
 	}
-	
+
 	public int[] getCoords()
 	{
 		return this.coords;
@@ -178,130 +201,64 @@ public class Sector
 		return resourceSupply;
 	}
 
-	/*public void Pulse()
-	{
-		DistributeResources();
-		ProduceGoods();
-		DisseminateProducts();
-		ReceiveShipments();
-	}*/
+	/*
+	 * public void Pulse() { DistributeResources(); ProduceGoods();
+	 * DisseminateProducts(); ReceiveShipments(); }
+	 */
 
-	/*public void ReceiveShipments()
-	{
-		double[] res;
-		for (int i = 0; i < this.resourcesInTransit.size(); i++)
-		{
-			if (this.resourcesInTransit.get(i)[0] == 0)
-			{
-				res = this.resourcesInTransit.get(i);
-				this.resourceStockpile.put(res[1],
-						this.resourceStockpile.get(res[1]) + res[2]);
-				this.resourcesInTransit.remove(i);
-				i--;
-			} else {
-				this.resourcesInTransit.get(i)[0]--;
-			}
-		}
-	}
-
-	private void DisseminateProducts()
-	{
-		Queue<Sector> q = new LinkedList<>();
-		ArrayList<Sector> traversed = new ArrayList<>();
-		Sector s;
-		HashMap<Integer, Double> localDemand = new HashMap<>();
-		int key;
-		double value, transferAmount;
-		boolean quit = false;
-
-		q.addAll(this.sectorList);
-		q.forEach((sect) -> sect.setDistance(1));
-
-		while (!q.isEmpty() && !quit)
-		{
-			s = q.poll();
-			localDemand = s.Demand();
-
-			for (Entry<Integer, Double> res : this.resourceSupply
-					.entrySet())
-			{
-				key = res.getKey();
-				value = res.getValue();
-				if (localDemand.containsKey(key))
-				{
-					transferAmount = Math.min(localDemand.get(key), value);
-					s.SendShipment(new double[] { s.getDistance(), key, transferAmount } );
-					res.setValue(value - transferAmount);
-				}
-			}
-			
-			if (s.getDistance() < Controller.MAX_TRAVEL_DISTANCE)
-			{
-				//Watch this; expecting a bug from wrong distance reporting
-				s.sectorList.forEach((sect) -> 
-				{
-					if (sect.getDistance() == 0)
-					{
-						sect.setDistance(this.getDistance() + 1);
-						q.add(sect);
-						traversed.add(sect);
-					}
-				});
-			}
-			
-			quit = true;
-			for (int res : this.resourceStockpile.values())
-			{
-				if (res > 0)
-				{
-					quit = false;
-					break;
-				}
-			}
-		}
-		
-		for (Sector sect : traversed)
-		{
-			sect.setDistance(0);
-		}
-	}
-
-	private void SendShipment(double[] ds)
-	{
-		this.resourcesInTransit.add(ds);
-		
-	}
-
-	private void DistributeResources()
-	{
-		ArrayList<double[]> allDemands = new ArrayList<>();
-		double[] demand;
-		double totalDemand, portion;
-
-		for (Entry<Integer, Integer> res : this.resourceStockpile.entrySet())
-		{
-			totalDemand = 0;
-			for (int i = 0; i < this.factoryList.size(); i++)
-			{
-				demand = this.factoryList.get(i).DemandRatio(res.getKey());
-				if (demand[0] == 1)
-					continue;
-				totalDemand += demand[1];
-				allDemands.add(new double[] { i, demand[1] });
-			}
-
-			for (double[] pair : allDemands)
-			{
-				portion = res.getValue() * pair[1] / totalDemand;
-				this.factoryList.get((int) pair[0]).AddToStockpile(
-						new int[] { res.getKey(), (int) portion });
-			}
-
-			res.setValue(0);
-		}
-	}*/
-
-	
+	/*
+	 * public void ReceiveShipments() { double[] res; for (int i = 0; i <
+	 * this.resourcesInTransit.size(); i++) { if
+	 * (this.resourcesInTransit.get(i)[0] == 0) { res =
+	 * this.resourcesInTransit.get(i); this.resourceStockpile.put(res[1],
+	 * this.resourceStockpile.get(res[1]) + res[2]);
+	 * this.resourcesInTransit.remove(i); i--; } else {
+	 * this.resourcesInTransit.get(i)[0]--; } } }
+	 * 
+	 * private void DisseminateProducts() { Queue<Sector> q = new
+	 * LinkedList<>(); ArrayList<Sector> traversed = new ArrayList<>(); Sector
+	 * s; HashMap<Integer, Double> localDemand = new HashMap<>(); int key;
+	 * double value, transferAmount; boolean quit = false;
+	 * 
+	 * q.addAll(this.sectorList); q.forEach((sect) -> sect.setDistance(1));
+	 * 
+	 * while (!q.isEmpty() && !quit) { s = q.poll(); localDemand = s.Demand();
+	 * 
+	 * for (Entry<Integer, Double> res : this.resourceSupply .entrySet()) { key
+	 * = res.getKey(); value = res.getValue(); if (localDemand.containsKey(key))
+	 * { transferAmount = Math.min(localDemand.get(key), value);
+	 * s.SendShipment(new double[] { s.getDistance(), key, transferAmount } );
+	 * res.setValue(value - transferAmount); } }
+	 * 
+	 * if (s.getDistance() < Controller.MAX_TRAVEL_DISTANCE) { //Watch this;
+	 * expecting a bug from wrong distance reporting s.sectorList.forEach((sect)
+	 * -> { if (sect.getDistance() == 0) { sect.setDistance(this.getDistance() +
+	 * 1); q.add(sect); traversed.add(sect); } }); }
+	 * 
+	 * quit = true; for (int res : this.resourceStockpile.values()) { if (res >
+	 * 0) { quit = false; break; } } }
+	 * 
+	 * for (Sector sect : traversed) { sect.setDistance(0); } }
+	 * 
+	 * private void SendShipment(double[] ds) { this.resourcesInTransit.add(ds);
+	 * 
+	 * }
+	 * 
+	 * private void DistributeResources() { ArrayList<double[]> allDemands = new
+	 * ArrayList<>(); double[] demand; double totalDemand, portion;
+	 * 
+	 * for (Entry<Integer, Integer> res : this.resourceStockpile.entrySet()) {
+	 * totalDemand = 0; for (int i = 0; i < this.factoryList.size(); i++) {
+	 * demand = this.factoryList.get(i).DemandRatio(res.getKey()); if (demand[0]
+	 * == 1) continue; totalDemand += demand[1]; allDemands.add(new double[] {
+	 * i, demand[1] }); }
+	 * 
+	 * for (double[] pair : allDemands) { portion = res.getValue() * pair[1] /
+	 * totalDemand; this.factoryList.get((int) pair[0]).AddToStockpile( new
+	 * int[] { res.getKey(), (int) portion }); }
+	 * 
+	 * res.setValue(0); } }
+	 */
 
 	public int getDistance()
 	{
@@ -323,30 +280,36 @@ public class Sector
 		return sectorList;
 	}
 
-	/*public ArrayList<int[]> getResourcesInTransit()
-	{
-		return resourcesInTransit;
-	}*/
+	/*
+	 * public ArrayList<int[]> getResourcesInTransit() { return
+	 * resourcesInTransit; }
+	 */
 
 	public HashMap<Integer, Double> getResourceStockpile()
 	{
 		this.resourceStockpile.entrySet().forEach((a) -> a.setValue(0.0));
-		
+
 		for (Factory f : this.factoryList)
 		{
 			for (double[] res : f.getStockpile())
 			{
-				double value = this.resourceStockpile.get((int) res[0]) + res[1];
+				double value = this.resourceStockpile.get((int) res[0])
+						+ res[1];
 				this.resourceStockpile.put((int) res[0], value);
 			}
 		}
-		
+
 		return resourceStockpile;
 	}
 
 	public HashMap<Integer, Double> getResourceDemand()
 	{
 		return this.resourceDemand;
+	}
+	
+	public HashMap<Integer, Double> getAvgStockpile()
+	{
+		return this.avgStockpile;
 	}
 
 	public int getId()
